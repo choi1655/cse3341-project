@@ -19,7 +19,7 @@ class Scanner {
 	// Constructor should open the file and find the first token
 	Scanner(String filename) {
 		keywords = new HashMap<>();
-		
+
 		populateKeywords();
 		populateSpecials();
 
@@ -89,7 +89,6 @@ class Scanner {
 		keywords.put("!", Core.NEGATION);
 		keywords.put("==", Core.EQUAL);
 		keywords.put("<", Core.LESS);
-		// specials.put(">", );
 		keywords.put("<=", Core.LESSEQUAL);
 		keywords.put("+", Core.ADD);
 		keywords.put("-", Core.SUB);
