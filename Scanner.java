@@ -15,6 +15,7 @@ class Scanner {
 	private Core currentToken;
 	private String currentLine;
 	private int indexPointer;
+	private String currentTokenString;
 
 	// Constructor should open the file and find the first token
 	Scanner(String filename) {
@@ -32,16 +33,16 @@ class Scanner {
 			// set the first token
 			if (fileScanner.hasNextLine()) {
 				currentLine = fileScanner.nextLine();
-				currentToken = findCurrentToken();
+				currentToken = findNextToken();
+				indexPointer = 0;
 			} else {
 				currentToken = Core.ERROR;
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			System.out.println("Error occurred while opening the input file");
-			System.exit(-1);
-		} finally {
 			fileScanner.close();
+			System.exit(-1);
 		}
 
 	}
@@ -51,10 +52,64 @@ class Scanner {
 	 * 1. see if indexPointer exceeds the length of currentLine
 	 * 2. If exceeds, use fileScanner to grab another line and update currentLine
 	 * 3. If does not exceed, brute force to find next token and update indexPointer
-	 * @return TODO returns Core.ERROR for now
+	 * @return next token
 	 */
-	private Core findCurrentToken() {
-		return Core.ERROR;
+	private Core findNextToken() {
+		// if fileScanner is null, fileScanner hit EOF before
+		if (fileScanner == null) {
+			return Core.EOF;
+		}
+		// if index pointer exceeds the length of current line, new line needed to read
+		if (indexPointer >= currentLine.length()) {
+			if (fileScanner.hasNextLine()) {
+				currentLine = fileScanner.nextLine();
+				indexPointer = 0;
+			} else {
+				fileScanner.close();
+				fileScanner = null;
+				return Core.EOF;
+			}
+		}
+
+		// brute force match
+		StringBuilder keyword = new StringBuilder("");
+		int starting = indexPointer;
+		for (int i = starting; i < currentLine.length(); i++) {
+			indexPointer++;
+			char currentChar = currentLine.charAt(i);
+			// stop at whitespaces
+			if (currentChar == ' ') {
+				// TODO: might have to move the pointer until after space
+				break;
+			}
+			// if current char exists in keywords map, must be one of specials
+			if (keywords.containsKey(currentChar + "")) {
+				break;
+			}
+			keyword.append(currentChar);
+			if (keywords.containsKey(keyword.toString())) {
+				currentTokenString = keyword.toString();
+				return keywords.get(keyword.toString());
+			}
+		}
+
+		currentTokenString = keyword.toString();
+		// if it didn't match anything, must be a var (ID) or number (CONST).
+		return isNumber(keyword.toString()) ? Core.CONST : Core.ID;
+	}
+
+	/**
+	 * Returns true if the passed in string is a number.
+	 * @param str to evaluate
+	 * @return true if str is a number
+	 */
+	private boolean isNumber(String str) {
+		try {
+			Integer.parseInt(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 
 	private void populateKeywords() {
@@ -97,7 +152,7 @@ class Scanner {
 
 	// nextToken should advance the scanner to the next token
 	public void nextToken() {
-		
+		currentToken = findNextToken();
 	}
 
 	// currentToken should return the current token
@@ -108,13 +163,19 @@ class Scanner {
 	// If the current token is ID, return the string value of the identifier
 	// Otherwise, return value does not matter
 	public String getID() {
-		return "";
+		if (currentToken != Core.ID) {
+			return "";
+		}
+		return currentTokenString;
 	}
 
 	// If the current token is CONST, return the numerical value of the constant
 	// Otherwise, return value does not matter
 	public int getCONST() {
-		return 0;
+		if (currentToken != Core.CONST) {
+			return 0;
+		}
+		return Integer.parseInt(currentTokenString);
 	}
 
 }
