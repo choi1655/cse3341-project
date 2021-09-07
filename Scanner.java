@@ -34,7 +34,6 @@ class Scanner {
 			if (fileScanner.hasNextLine()) {
 				currentLine = fileScanner.nextLine();
 				currentToken = findNextToken();
-				indexPointer = 0;
 			} else {
 				currentToken = Core.ERROR;
 			}
@@ -63,6 +62,10 @@ class Scanner {
 		if (indexPointer >= currentLine.length()) {
 			if (fileScanner.hasNextLine()) {
 				currentLine = fileScanner.nextLine();
+				// keep getting new line until it is nonwhitespace
+				while (fileScanner.hasNextLine() && currentLine.trim().isEmpty()) {
+					currentLine = fileScanner.nextLine();
+				}
 				indexPointer = 0;
 			} else {
 				fileScanner.close();
@@ -72,23 +75,42 @@ class Scanner {
 		}
 
 		// brute force match
-		StringBuilder keyword = new StringBuilder("");
-		int starting = indexPointer;
-		for (int i = starting; i < currentLine.length(); i++) {
-			indexPointer++;
+		StringBuilder keyword = new StringBuilder();
+		for (int i = indexPointer; i < currentLine.length(); i++) {
 			char currentChar = currentLine.charAt(i);
 			// stop at whitespaces
 			if (currentChar == ' ') {
-				// TODO: might have to move the pointer until after space
-				break;
+				// handles cases like "variable123 ;"
+				// if keyword has empty string, iterate until nonwhitespace. otherwise, break
+				if (keyword.toString().trim().isEmpty()) {
+					while (currentChar == ' ') {
+						currentChar = currentLine.charAt(++i);
+					}
+					indexPointer = i;
+				} else {
+					indexPointer = i;
+					break;
+				}
 			}
 			// if current char exists in keywords map, must be one of specials
 			if (keywords.containsKey(currentChar + "")) {
-				break;
+				// handles cases like "variable+"
+				// if keyword has empty string, it means currentChar is a special
+				if (keyword.toString().trim().isEmpty()) {
+					indexPointer = i + 1;
+					currentTokenString = currentChar + "";
+					return keywords.get(currentChar + "");
+				} else {
+					// TODO code crashes here with XY, X
+					currentTokenString = currentChar + "";
+					indexPointer = i + 1;
+					return keywords.get(currentChar + "");
+				}
 			}
 			keyword.append(currentChar);
 			if (keywords.containsKey(keyword.toString())) {
 				currentTokenString = keyword.toString();
+				indexPointer = i + 1;
 				return keywords.get(keyword.toString());
 			}
 		}
