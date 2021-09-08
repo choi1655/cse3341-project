@@ -76,7 +76,8 @@ class Scanner {
 
 		// brute force match
 		StringBuilder keyword = new StringBuilder();
-		for (int i = indexPointer; i < currentLine.length(); i++) {
+		int i = indexPointer;
+		for (i = indexPointer; i < currentLine.length(); i++) {
 			char currentChar = currentLine.charAt(i);
 			// stop at whitespaces
 			if (currentChar == ' ') {
@@ -102,9 +103,8 @@ class Scanner {
 					return keywords.get(currentChar + "");
 				} else {
 					// TODO code crashes here with XY, X
-					currentTokenString = currentChar + "";
-					indexPointer = i + 1;
-					return keywords.get(currentChar + "");
+					indexPointer = i;
+					break;
 				}
 			}
 			keyword.append(currentChar);
