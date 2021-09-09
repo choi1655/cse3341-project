@@ -2,4 +2,6 @@
 *.swp
 # VS Code files
 .vscode/
+# Java class files
+*.class
 
