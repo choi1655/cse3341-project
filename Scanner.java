@@ -103,9 +103,30 @@ class Scanner {
 				// handles cases like "variable+"
 				// if keyword has empty string, it means currentChar is a special
 				if (keyword.toString().trim().isEmpty()) {
-					indexPointer = i + 1;
-					currentTokenString = currentChar + "";
-					return keywords.get(currentChar + "");
+					/**
+					 * Matching special cases.
+					 * 1. =*; ==, =
+				 	 * 2. <*; <=, <
+					 */
+					keyword.append(currentChar + "");
+					if (currentChar == '=' || currentChar == '<') {
+						// check if there are any more characters and if there is, check to see if the second char is '='.
+						int nextIndexPointer = i + 1;
+						if (nextIndexPointer < currentLine.length()) {
+							// there is more to look
+							if (currentLine.charAt(nextIndexPointer) == '=') {
+								keyword.append('=');
+								nextIndexPointer++;
+							}
+						}
+						indexPointer = nextIndexPointer;
+						currentTokenString = keyword.toString();
+						return keywords.get(keyword.toString());
+					} else {
+						indexPointer = i + 1;
+						currentTokenString = keyword.toString();
+						return keywords.get(keyword.toString());
+					}
 				} else {
 					indexPointer = i;
 					break;
@@ -115,6 +136,11 @@ class Scanner {
 			// special case for end prefix
 			// end, endfunc, endclass, endwhile, endif
 			if (keywords.containsKey(keyword.toString())) {
+				/**
+				 * Matching special cases.
+				 * Cases like 
+				 * 1. end*; end, endwhile, endif, endclass
+				 */
 				// if keyword is "end", iterate until next space or special character
 				if (keyword.toString().equals("end")) {
 					currentChar = currentLine.charAt(++i);
@@ -133,6 +159,10 @@ class Scanner {
 			}
 		}
 
+		// if i is over currentline's length, it means the line ended and no match was found - indicates CONST or ID.
+		if (i >= currentLine.length()) {
+			indexPointer = i;
+		}
 		currentTokenString = keyword.toString();
 		// if it didn't match anything, must be a var (ID) or number (CONST).
 		return isNumber(keyword.toString()) ? Core.CONST : Core.ID;
