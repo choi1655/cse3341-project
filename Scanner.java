@@ -80,11 +80,11 @@ class Scanner {
 		for (i = indexPointer; i < currentLine.length(); i++) {
 			char currentChar = currentLine.charAt(i);
 			// stop at whitespaces
-			if (currentChar == ' ') {
+			if (currentChar == ' ' || currentChar == '\t') {
 				// handles cases like "variable123 ;"
 				// if keyword has empty string, iterate until nonwhitespace. otherwise, break
 				if (keyword.toString().trim().isEmpty()) {
-					while (currentChar == ' ') {
+					while (currentChar == ' ' || currentChar == '\t') {
 						currentChar = currentLine.charAt(++i);
 					}
 					indexPointer = i;
@@ -102,15 +102,28 @@ class Scanner {
 					currentTokenString = currentChar + "";
 					return keywords.get(currentChar + "");
 				} else {
-					// TODO code crashes here with XY, X
 					indexPointer = i;
 					break;
 				}
 			}
 			keyword.append(currentChar);
+			// special case for end prefix
+			// end, endfunc, endclass, endwhile, endif
 			if (keywords.containsKey(keyword.toString())) {
-				currentTokenString = keyword.toString();
-				indexPointer = i + 1;
+				// if keyword is "end", iterate until next space or special character
+				if (keyword.toString().equals("end")) {
+					currentChar = currentLine.charAt(++i);
+					while (currentChar != ' ' && !keywords.containsKey(currentChar + "") && currentChar != '\t') {
+						keyword.append(currentChar);
+						currentChar = currentLine.charAt(++i);
+					}
+					currentTokenString = keyword.toString();
+					indexPointer = i;
+				} else {
+					currentTokenString = keyword.toString();
+					indexPointer = i + 1;
+				}
+
 				return keywords.get(keyword.toString());
 			}
 		}
