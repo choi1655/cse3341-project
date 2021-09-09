@@ -59,7 +59,7 @@ class Scanner {
 			return Core.EOF;
 		}
 		// if index pointer exceeds the length of current line, new line needed to read
-		if (indexPointer >= currentLine.length()) {
+		if (indexPointer >= currentLine.length() || currentLine.substring(indexPointer).trim().isEmpty()) {
 			if (fileScanner.hasNextLine()) {
 				currentLine = fileScanner.nextLine();
 				// keep getting new line until it is nonwhitespace
@@ -67,6 +67,11 @@ class Scanner {
 					currentLine = fileScanner.nextLine();
 				}
 				indexPointer = 0;
+				if (currentLine.trim().isEmpty()) {
+					fileScanner.close();
+					fileScanner = null;
+					return Core.EOF;
+				}
 			} else {
 				fileScanner.close();
 				fileScanner = null;
