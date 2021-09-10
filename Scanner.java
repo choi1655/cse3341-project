@@ -142,7 +142,7 @@ class Scanner {
 				 * 1. end*; end, endwhile, endif, endclass
 				 */
 				// if keyword is "end", iterate until next space or special character
-				if (keyword.toString().equals("end")) {
+				if (keyword.toString().equals("end") && i + 1 < currentLine.length()) {
 					currentChar = currentLine.charAt(++i);
 					while (currentChar != ' ' && !keywords.containsKey(currentChar + "") && currentChar != '\t') {
 						keyword.append(currentChar);
