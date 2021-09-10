@@ -3,6 +3,7 @@
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.io.IOException;
 
 
@@ -163,6 +164,7 @@ class Scanner {
 		if (i >= currentLine.length()) {
 			indexPointer = i;
 		}
+		if (!isValidKeyword(keyword.toString())) return Core.ERROR;
 		currentTokenString = keyword.toString();
 		// if it didn't match anything, must be a var (ID) or number (CONST).
 		return isNumber(keyword.toString()) ? Core.CONST : Core.ID;
@@ -180,6 +182,50 @@ class Scanner {
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+
+	/**
+	 * Valid keyword is
+	 * 1. starts with a letter
+	 * 2. cannot contain special or invalid characters
+	 * 3. can end with number
+	 * @param keyword
+	 * @return
+	 */
+	private boolean isValidKeyword(String keyword) {
+		if (keyword.trim().isEmpty()) return false;
+
+		if (isNumber(keyword)) {
+			if (Integer.parseInt(keyword) < 0 || Integer.parseInt(keyword) > 1023) {
+				System.out.println("Constant must be between 0 and 1023");
+				return false;
+			}
+			return true;
+		}
+
+		for (Character c : keyword.toLowerCase().toCharArray()) {
+			if ((c < 'a' || c > 'z') && !isNumber(c + "")) {
+				System.out.printf("Invalid character: %c\n", c);
+				return false;
+			}
+		}
+		
+		if (keyword.toLowerCase().charAt(0) < 'a' || keyword.toLowerCase().charAt(0) > 'z') {
+			System.out.println("ID must start with a letter");
+			return false;
+		}
+		Set<String> keySet = keywords.keySet();
+		for (String key : keySet) {
+			if (key.length() != 1) {
+				continue;
+			}
+			if (keyword.contains(key)) {
+				System.out.println("Special cannot be a part of ID");
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private void populateKeywords() {
