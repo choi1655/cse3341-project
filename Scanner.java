@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.io.IOException;
+import java.math.BigInteger;
 
 
 class Scanner {
@@ -177,7 +178,7 @@ class Scanner {
 	 */
 	private boolean isNumber(String str) {
 		try {
-			Integer.parseInt(str);
+			new BigInteger(str);
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
@@ -196,7 +197,8 @@ class Scanner {
 		if (keyword.trim().isEmpty()) return false;
 
 		if (isNumber(keyword)) {
-			if (Integer.parseInt(keyword) < 0 || Integer.parseInt(keyword) > 1023) {
+			BigInteger number = new BigInteger(keyword);
+			if (number.compareTo(BigInteger.ZERO) < 0 || number.compareTo(new BigInteger("1023")) > 0) {
 				System.out.println("Constant must be between 0 and 1023");
 				return false;
 			}
@@ -209,7 +211,7 @@ class Scanner {
 				return false;
 			}
 		}
-		
+
 		if (keyword.toLowerCase().charAt(0) < 'a' || keyword.toLowerCase().charAt(0) > 'z') {
 			System.out.println("ID must start with a letter");
 			return false;
