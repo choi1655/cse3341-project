@@ -1,0 +1,20 @@
+John Choi (choi.1655)
+
+Files:
+	Core.java
+		TS (teaching staff) provided Java enum
+	
+	Main.java
+		TS provided Java class. Runner for the whole program with main
+		method.
+	
+	Scanner.java
+		Scanner class with implementation. Takes in a filename in
+		constructor.
+	
+Special Features/Comments:
+
+Known Bugs:
+
+
+
