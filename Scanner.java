@@ -7,11 +7,17 @@ import java.util.Set;
 import java.io.IOException;
 import java.math.BigInteger;
 
-
+/**
+ * Scanner class that reads the source code file and parses it.
+ * @author choi.1655@osu.edu
+ * @version 09102021
+ */
 class Scanner {
 	
+	// contains mapping of string value keywords and their corresponding Enum values.
 	private Map<String, Core> keywords;
 
+	// Java's native scanner that reads source file line by line
 	private java.util.Scanner fileScanner;
 
 	private Core currentToken;
@@ -19,7 +25,10 @@ class Scanner {
 	private int indexPointer;
 	private String currentTokenString;
 
-	// Constructor should open the file and find the first token
+	/**
+	 * Constructor should open the file and find the first token
+	 * @param filename name of the file
+	 */
 	Scanner(String filename) {
 		keywords = new HashMap<>();
 
@@ -69,6 +78,7 @@ class Scanner {
 					currentLine = fileScanner.nextLine();
 				}
 				indexPointer = 0;
+				// if nothing to read after skipping empty lines, means EOF
 				if (currentLine.trim().isEmpty()) {
 					fileScanner.close();
 					fileScanner = null;
@@ -84,6 +94,7 @@ class Scanner {
 		// brute force match
 		StringBuilder keyword = new StringBuilder();
 		int i = indexPointer;
+		// start looking at the line from indexPointer
 		for (i = indexPointer; i < currentLine.length(); i++) {
 			char currentChar = currentLine.charAt(i);
 			// stop at whitespaces
@@ -196,7 +207,9 @@ class Scanner {
 	private boolean isValidKeyword(String keyword) {
 		if (keyword.trim().isEmpty()) return false;
 
+		// check if keyword is a number
 		if (isNumber(keyword)) {
+			// if number, check if between 0 and 1023
 			BigInteger number = new BigInteger(keyword);
 			if (number.compareTo(BigInteger.ZERO) < 0 || number.compareTo(new BigInteger("1023")) > 0) {
 				System.out.println("Constant must be between 0 and 1023");
@@ -205,6 +218,8 @@ class Scanner {
 			return true;
 		}
 
+		// check every char of keyword to see if it contains invalid character
+		// must only contain a-z or number
 		for (Character c : keyword.toLowerCase().toCharArray()) {
 			if ((c < 'a' || c > 'z') && !isNumber(c + "")) {
 				System.out.printf("Invalid character: %c\n", c);
@@ -212,10 +227,12 @@ class Scanner {
 			}
 		}
 
+		// check if keyword starts with a letter
 		if (keyword.toLowerCase().charAt(0) < 'a' || keyword.toLowerCase().charAt(0) > 'z') {
 			System.out.println("ID must start with a letter");
 			return false;
 		}
+		// check if special character like + - * is in keyword
 		Set<String> keySet = keywords.keySet();
 		for (String key : keySet) {
 			if (key.length() != 1) {
@@ -230,6 +247,9 @@ class Scanner {
 		return true;
 	}
 
+	/**
+	 * Populates the map with keywords and its corresponding enum.
+	 */
 	private void populateKeywords() {
 		keywords.put("program", Core.PROGRAM);
 		keywords.put("begin", Core.BEGIN);
@@ -253,6 +273,9 @@ class Scanner {
 		keywords.put("ref", Core.REF);
 	}
 
+	/**
+	 * Populates the map with the specials with its corresponding enum.
+	 */
 	private void populateSpecials() {
 		keywords.put(";", Core.SEMICOLON);
 		keywords.put("(", Core.LPAREN);
@@ -268,18 +291,26 @@ class Scanner {
 		keywords.put("*", Core.MULT);
 	}
 
-	// nextToken should advance the scanner to the next token
+	/**
+	 * nextToken should advance the scanner to the next token
+	 */
 	public void nextToken() {
 		currentToken = findNextToken();
 	}
 
-	// currentToken should return the current token
+	/**
+	 * currentToken should return the current token
+	 * @return current token in enum
+	 */
 	public Core currentToken() {
 		return currentToken;
 	}
 
-	// If the current token is ID, return the string value of the identifier
-	// Otherwise, return value does not matter
+	/**
+	 * If the current token is ID, return the string value of the identifier.
+	 * Otherwise, return value does not matter.
+	 * @return current keyword in string
+	 */
 	public String getID() {
 		if (currentToken != Core.ID) {
 			return "";
@@ -287,8 +318,12 @@ class Scanner {
 		return currentTokenString;
 	}
 
-	// If the current token is CONST, return the numerical value of the constant
-	// Otherwise, return value does not matter
+	/**
+	 * If the current token is CONST, return the numerical value of the constant.
+	 * Otherwise, return value does not matter.
+	 * Assumes const is valid (0-1023).
+	 * @return constant in number
+	 */
 	public int getCONST() {
 		if (currentToken != Core.CONST) {
 			return 0;
