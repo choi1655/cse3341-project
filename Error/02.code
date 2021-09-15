@@ -1,6 +1,5 @@
 program
 	int x;
 begin
-	x = 10;
-	output x;
+	x=y;
 end

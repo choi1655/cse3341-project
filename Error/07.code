@@ -1,6 +1,6 @@
 program
 	int x;
 begin
-	x=10;
-	output x;
+	input x;
 end
+this is not good

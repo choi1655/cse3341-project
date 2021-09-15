@@ -1,6 +1,7 @@
 program
 	int x;
+	int x;
 begin
-	x = 10;
-	output x;
+	x=1;
+	x=x+x*x;
 end
