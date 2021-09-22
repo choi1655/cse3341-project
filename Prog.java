@@ -16,17 +16,23 @@ public class Prog extends Grammar {
         if (s.currentToken() != Core.BEGIN) {
             ds = new DeclSeq();
             ds.parse(s);
+            s.nextToken();
         }
-
-        s.nextToken();
 
         // check if current token is BEGIN
         if (s.currentToken() != Core.BEGIN) {
             error(s.currentToken(), Core.BEGIN);
         }
 
+        s.nextToken();
+
         ss = new StmtSeq();
         ss.parse(s);
         s.nextToken();
+
+        // verify END
+        if (s.currentToken() != Core.END) {
+            error(s.currentToken(), Core.END);
+        }
     }
 }
