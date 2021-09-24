@@ -5,9 +5,7 @@ class Main {
 
 		Prog programRoot = new Prog();
 		programRoot.parse(s);
-		
-		// TODO: Perform Semantic checks on the parse tree
-		
+			
 		Print p = Print.instance();
 		// print the Core program if all checks pass
 		p.print();
