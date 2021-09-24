@@ -13,15 +13,14 @@ public class Factor extends Grammar {
 
         // if LPAREN, keep going
         if (s.currentToken() == Core.LPAREN) {
+            s.nextToken();
             expression = new Expr();
             expression.parse(s);
 
-            s.nextToken();
             // verify RPAREN
             if (s.currentToken() != Core.RPAREN) {
                 error(s.currentToken(), Core.RPAREN);
             }
-            s.nextToken();
         }
     }
 
