@@ -11,6 +11,7 @@ public class If extends Grammar {
         if (s.currentToken() != Core.IF) {
             error(s.currentToken(), Core.IF);
         }
+        
         s.nextToken();
         cond = new Cond();
         cond.parse(s);

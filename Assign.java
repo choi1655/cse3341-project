@@ -11,10 +11,10 @@ public class Assign extends Grammar {
             error(s.currentToken(), Core.ID);
         }
 
-        // consume equal and verify
+        // consume equal sign (ASSIGN) and verify
         s.nextToken();
-        if (s.currentToken() != Core.EQUAL) {
-            error(s.currentToken(), Core.EQUAL);
+        if (s.currentToken() != Core.ASSIGN) {
+            error(s.currentToken(), Core.ASSIGN);
         }
 
         // consume next token - check if new or ref
@@ -40,14 +40,11 @@ public class Assign extends Grammar {
             expression = new Expr();
             expression.parse(s);
 
-            s.nextToken();
             // verify if semicolon
             if (s.currentToken() != Core.SEMICOLON) {
                 error(s.currentToken(), Core.SEMICOLON);
             }
         }
-
-        s.nextToken();
     }
 
 }

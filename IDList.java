@@ -7,6 +7,7 @@ public class IDList extends Grammar {
     @Override
     public void parse(Scanner s) {
         // make sure token is ID
+        s.nextToken();
         if (s.currentToken() != Core.ID) {
             error(s.currentToken(), Core.ID);
         }

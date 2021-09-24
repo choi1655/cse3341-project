@@ -12,6 +12,7 @@ public class Cmpr extends Grammar {
         if (s.currentToken() != Core.EQUAL && s.currentToken() != Core.LESS && s.currentToken() != Core.LESSEQUAL) {
             error(s.currentToken(), Core.EQUAL, Core.LESS, Core.LESSEQUAL);
         }
+
         s.nextToken();
 
         expression = new Expr();

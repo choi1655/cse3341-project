@@ -16,7 +16,6 @@ public class Decl extends Grammar {
         } else {
             error(s.currentToken(), Core.INT, Core.REF);
         }
-        s.nextToken();
     }
 
 }

@@ -6,8 +6,6 @@ public class Stmt extends Grammar {
 
     @Override
     public void parse(Scanner s) {
-        s.nextToken();
-
         if (s.currentToken() == Core.ID) {
             grammar = new Assign();
         } else if (s.currentToken() == Core.IF) {
@@ -22,7 +20,6 @@ public class Stmt extends Grammar {
             grammar = new Decl();
         }
         grammar.parse(s);
-        s.nextToken();
     }
 
 }

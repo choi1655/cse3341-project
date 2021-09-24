@@ -11,8 +11,6 @@ public class Factor extends Grammar {
             error(s.currentToken(), Core.ID, Core.CONST, Core.LPAREN);
         }
 
-        s.nextToken();
-
         // if LPAREN, keep going
         if (s.currentToken() == Core.LPAREN) {
             expression = new Expr();

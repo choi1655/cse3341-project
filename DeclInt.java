@@ -14,7 +14,6 @@ public class DeclInt extends Grammar {
         il = new IDList();
         il.parse(s);
 
-        s.nextToken();
         // make sure next token is semicolon
         if (s.currentToken() != Core.SEMICOLON) {
             error(s.currentToken(), Core.SEMICOLON);
