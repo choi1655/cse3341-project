@@ -71,6 +71,7 @@ public class Print {
     /**
      * Adds token by token to construct a single line of code.
      * Contains protocols for each Core enums (tokens) and changes line when appropriate.
+     * Also performs semantic checks everytime a variable is parsed.
      * @param s scanner
      */
     public void addCode(Scanner s) {
