@@ -141,6 +141,9 @@ public class Print {
                 buffer.append("endif");
                 flush();
                 break;
+            case INPUT:
+                buffer.append("input ");
+                break;
             case OUTPUT:
                 buffer.append("output ");
                 break;
