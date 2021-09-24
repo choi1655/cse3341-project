@@ -32,7 +32,6 @@ public class StmtSeq extends Grammar {
         if (stmtTokens.contains(s.currentToken())) {
             ss = new StmtSeq();
             ss.parse(s);
-            // s.nextToken();
         }
     }
     
