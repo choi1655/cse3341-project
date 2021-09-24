@@ -1,5 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * Singleton class that handles code printing.
@@ -18,8 +22,18 @@ public class Print {
 
     private static Print print;
 
-    private boolean beginUsed = false;
+    private boolean globalEnded = false;
+    private boolean declaringInt = false;
+    private boolean declaringRef = false;
+    private boolean assigning = false;
 
+    private String lastVariable = "";
+
+    private Set<String> intScope = new HashSet<>();
+    private Stack<Set<String>> intScopes = new Stack<>();
+    private Set<String> refScope = new HashSet<>();
+    private Stack<Set<String>> refScopes = new Stack<>();
+    
     private Print() {}
 
     /**
@@ -36,10 +50,16 @@ public class Print {
 
     public void increaseIndent() {
         indentNum++;
+        intScopes.push(intScope);
+        intScope = new HashSet<>();
+        refScopes.push(refScope);
+        refScope = new HashSet<>();
     }
 
     public void decreaseIndent() {
         indentNum--;
+        intScopes.pop();
+        refScopes.pop();
     }
 
     public void print() {
@@ -74,22 +94,41 @@ public class Print {
                 break;
             case SEMICOLON:
                 buffer.append(";");
+                declaringInt = false;
+                declaringRef = false;
                 flush();
                 break;
             case INT:
                 buffer.append("int ");
+                if (!assigning) {
+                    declaringInt = true;
+                }
                 break;
             case ID:
                 buffer.append(s.getID());
+                if (declaringInt) {
+                    checkSemanticInt(s.getID());
+                    intScope.add(s.getID());
+                }
+                if (declaringRef) {
+                    checkSemanticRef(s.getID());
+                    refScope.add(s.getID());
+                }
+                if (assigning) {
+                    checkSemanticAssign(s.getID());
+                    assigning = false;
+                }
+                lastVariable = s.getID();
                 break;
             case ASSIGN:
                 buffer.append("=");
+                assigning = true;
                 break;
             case CONST:
                 buffer.append(s.getCONST());
                 break;
             case BEGIN:
-                if (beginUsed) {
+                if (globalEnded) {
                     buffer.append(" begin");
                     fullCode.add(buffer.toString());
                     buffer = new StringBuilder();
@@ -103,7 +142,7 @@ public class Print {
                     buffer.append("begin");
                     flush();
                     increaseIndent();
-                    beginUsed = true;
+                    globalEnded = true;
                 }
                 break;
             case END:
@@ -184,6 +223,9 @@ public class Print {
                 break;
             case REF:
                 buffer.append("ref ");
+                if (!assigning) {
+                    declaringRef = true;
+                }
                 break;
             case COMMA:
                 buffer.append(",");
@@ -201,6 +243,75 @@ public class Print {
                 buffer.append(s.currentToken().toString());
                 break;
         }
+    }
+
+    private void checkSemanticInt(String var) {
+        // check if declaring or just checking if declared
+        if (declaringInt) {
+            if (intVariableExists(var)) {
+                System.out.printf("ERROR: variable %s already declared.\n", var);
+                System.exit(-1);
+            }
+        } else {
+            // if not declaring, then check to see if this variable is already declared before use
+            if (!intVariableExists(var)) {
+                System.out.printf("ERROR: variable %s not initialized or out of scope.\n", var);
+                System.exit(-1);
+            }
+        }
+    }
+
+    private void checkSemanticRef(String var) {
+        if (declaringRef) {
+            if (refVariableExists(var)) {
+                System.out.printf("ERROR: variable %s already declared.\n", var);
+                System.exit(-1);
+            }
+        } else {
+            // if not declaring, then check to see if this variable is already declared before use
+            if (!refVariableExists(var)) {
+                System.out.printf("ERROR: variable %s not initialized or out of scope.\n", var);
+                System.exit(-1);
+            }
+        }
+    }
+
+    private void checkSemanticAssign(String var) {
+        if (assigning) {
+            // compare lastVariable to var to see if data type match
+            if (intVariableExists(lastVariable) && refVariableExists(var) || intVariableExists(var) && refVariableExists(lastVariable)) {
+                System.out.printf("ERROR: variable %s cannot be assigned to different data type.\n", var);
+                System.exit(-1);
+            }
+        }
+    }
+
+    private boolean intVariableExists(String var) {
+        // check the current scope
+        if (intScope.contains(var)) return true;
+        // go through the stack of scopes to make sure var exists
+        Iterator<Set<String>> iterator = intScopes.iterator();
+        while (iterator.hasNext()) {
+            Set<String> scope = iterator.next();
+            if (scope.contains(var)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean refVariableExists(String var) {
+        // check the current scope
+        if (refScope.contains(var)) return true;
+        // go through the stack of scopes to make sure var exists
+        Iterator<Set<String>> iterator = refScopes.iterator();
+        while (iterator.hasNext()) {
+            Set<String> scope = iterator.next();
+            if (scope.contains(var)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
