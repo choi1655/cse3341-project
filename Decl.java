@@ -14,15 +14,13 @@ public class Decl extends Grammar {
             di = new DeclInt();
             di.parse(s);
         }
-        if (s.currentToken() == Core.SEMICOLON) {
-            s.nextToken();
-        }
+        if (s.currentToken() == Core.SEMICOLON) s.nextToken();
         if (s.currentToken() == Core.REF) {
             dc = new DeclClass();
             dc.parse(s);
-        }
-        if (s.currentToken() == Core.SEMICOLON) {
-            s.nextToken();
+            if (s.currentToken() == Core.SEMICOLON) {
+                s.nextToken();
+            }
         }
     }
 }

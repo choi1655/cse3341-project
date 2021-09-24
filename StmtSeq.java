@@ -27,7 +27,7 @@ public class StmtSeq extends Grammar {
          * To figure out if the <stmt-seq> continues, you can either look for what a <stmt> 
          * would start with (IF, ID, WHILE, INPUT, OUTPUT, INT)
          */
-        s.nextToken();
+        if (!stmtTokens.contains(s.currentToken())) s.nextToken();
         if (stmtTokens.contains(s.currentToken())) {
             ss = new StmtSeq();
             ss.parse(s);

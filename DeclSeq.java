@@ -8,6 +8,7 @@ public class DeclSeq extends Grammar {
         d = new Decl();
         d.parse(s);
 
+        if (s.currentToken() == Core.SEMICOLON) s.nextToken();
         if (s.currentToken() == Core.BEGIN) return;
         if (s.currentToken() == Core.INT) {
             ds = new DeclSeq();
