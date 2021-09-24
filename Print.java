@@ -178,6 +178,15 @@ public class Print {
             case COMMA:
                 buffer.append(",");
                 break;
+            case NEGATION:
+                buffer.append("!");
+                break;
+            case LPAREN:
+                buffer.append("(");
+                break;
+            case RPAREN:
+                buffer.append(")");
+                break;
             default:
                 buffer.append(s.currentToken().toString());
                 break;

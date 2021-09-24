@@ -16,7 +16,6 @@ public class Cond extends Grammar {
             cond = new Cond();
             cond.parse(s);
 
-            s.nextToken();
             // verify RPAREN
             if (s.currentToken() != Core.RPAREN) {
                 error(s.currentToken(), Core.RPAREN);
