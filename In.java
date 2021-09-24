@@ -18,7 +18,7 @@ public class In extends Grammar {
         if (s.currentToken() != Core.SEMICOLON) {
             error(s.currentToken(), Core.SEMICOLON);
         }
-        s.nextToken();
+        // s.nextToken();
     }
 
 }

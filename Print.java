@@ -169,6 +169,15 @@ public class Print {
                 buffer.append("endwhile");
                 flush();
                 break;
+            case NEW:
+                buffer.append("new");
+                break;
+            case REF:
+                buffer.append("ref ");
+                break;
+            case COMMA:
+                buffer.append(",");
+                break;
             default:
                 buffer.append(s.currentToken().toString());
                 break;

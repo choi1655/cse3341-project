@@ -15,10 +15,8 @@ public class IDList extends Grammar {
         s.nextToken();
         // if token is comma, theres more
         if (s.currentToken() == Core.COMMA) {
-            s.nextToken(); // consume next expression
             il = new IDList();
             il.parse(s);
-            s.nextToken();
         }
     }
 

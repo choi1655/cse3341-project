@@ -18,7 +18,6 @@ public class Prog extends Grammar {
             ds.parse(s);
         }
 
-        s.nextToken();
         // check if current token is BEGIN
         if (s.currentToken() != Core.BEGIN) {
             error(s.currentToken(), Core.BEGIN);

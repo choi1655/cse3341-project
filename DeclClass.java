@@ -13,8 +13,6 @@ public class DeclClass extends Grammar {
         il = new IDList();
         il.parse(s);
 
-        // consume next token
-        s.nextToken();
         // expected semicolon
         if (s.currentToken() != Core.SEMICOLON) {
             error(s.currentToken(), Core.SEMICOLON);
