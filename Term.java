@@ -17,8 +17,6 @@ public class Term extends Grammar {
 
             terminal = new Term();
             terminal.parse(s);
-
-            s.nextToken();
         }
     }
 

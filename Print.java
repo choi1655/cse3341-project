@@ -41,7 +41,7 @@ public class Print {
         }
 
         // check if buffer has nothing (new line starting)
-        if (buffer.toString().trim().isEmpty()) {
+        if (buffer.toString().isEmpty()) {
             // add appropriate indentation
             for (int i = 0; i < indentNum; i++) {
                 buffer.append("\t");
@@ -85,6 +85,12 @@ public class Print {
                 break;
             case SUB:
                 buffer.append("-");
+                break;
+            case ADD:
+                buffer.append("+");
+                break;
+            case MULT:
+                buffer.append("*");
                 break;
             default:
                 buffer.append(s.currentToken().toString());

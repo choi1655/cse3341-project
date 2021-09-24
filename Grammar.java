@@ -9,6 +9,7 @@ public abstract class Grammar {
         System.out.printf("], but got %s\n", actual.toString());
         
 
+        Print p = Print.instance();
         for (int i = 2; i < Thread.currentThread().getStackTrace().length; i++) {
             StackTraceElement e = Thread.currentThread().getStackTrace()[i];
             System.out.println("In " + e.getClassName() + ".java:");

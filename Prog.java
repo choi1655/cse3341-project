@@ -31,7 +31,7 @@ public class Prog extends Grammar {
         s.nextToken();
 
         // verify END
-        if (s.currentToken() != Core.END) {
+        if (s.currentToken() != Core.END && s.currentToken() != Core.EOF) {
             error(s.currentToken(), Core.END);
         }
         s.nextToken();
