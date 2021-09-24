@@ -13,8 +13,8 @@ public class Decl extends Grammar {
         if (s.currentToken() == Core.INT) {
             di = new DeclInt();
             di.parse(s);
+            if (s.currentToken() == Core.SEMICOLON) s.nextToken();
         }
-        if (s.currentToken() == Core.SEMICOLON) s.nextToken();
         if (s.currentToken() == Core.REF) {
             dc = new DeclClass();
             dc.parse(s);

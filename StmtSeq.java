@@ -16,6 +16,7 @@ public class StmtSeq extends Grammar {
         stmtTokens.add(Core.INPUT);
         stmtTokens.add(Core.OUTPUT);
         stmtTokens.add(Core.INT);
+        stmtTokens.add(Core.REF);
     }
 
     @Override
