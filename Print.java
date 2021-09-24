@@ -96,6 +96,7 @@ public class Print {
                 buffer.append(";");
                 declaringInt = false;
                 declaringRef = false;
+                assigning = false;
                 flush();
                 break;
             case INT:
@@ -277,6 +278,11 @@ public class Print {
     }
 
     private void checkSemanticAssign(String var) {
+        // check if var even exists
+        if (!intVariableExists(var) && !refVariableExists(var)) {
+            System.out.printf("ERROR: variable %s not initialized or out of scope.\n", var);
+            System.exit(-1);
+        }
         if (assigning) {
             // compare lastVariable to var to see if data type match
             if (intVariableExists(lastVariable) && refVariableExists(var) || intVariableExists(var) && refVariableExists(lastVariable)) {
