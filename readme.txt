@@ -33,6 +33,9 @@ Files:
 		Singleton class that handles printing the parsed code.
 		Contains addCode() method that will take in tokens one by one and decide if the line should be terminated
 		depending on the token.
+		To correctly parse the code, buffer exists to construct a single line of code. When tokens like "then" or "begin" is reached,
+		the string in buffer is added to the list of code and the buffer gets emptied with the appropriate indentation to read another line
+		of code.
 		Print also performs semantic checks along the way. Every time it parses a variable, it verifies that the
 		variable is usable and the usage is valid.
 
@@ -40,8 +43,7 @@ Files:
 		TS (teaching staff) provided Java enum
 	
 	Main.java
-		TS provided Java class. Runner for the whole program with main
-		method.
+		Runner for the whole program with main method. Creates the parse tree.
 	
 	Scanner.java
 		TS provided Java class. Handles the scanner of the program.

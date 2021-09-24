@@ -1,6 +1,18 @@
 
+/**
+ * Abstract class for classes that defines rules.
+ * Contains the error method to print out errors whenever there is a syntax error.
+ * Contains the parse abstract method because all rules would need to parse.
+ * @author John Choi
+ * @version 09242021
+ */
 public abstract class Grammar {
 
+    /**
+     * Prints the syntax error message and terminates the program.
+     * @param actual actual token received
+     * @param expected tokens that are expected instead of the one that was received
+     */
     public void error(Core actual, Core ...expected) {
         System.out.print("ERROR: expected one of these: [ ");
         for (Core core : expected) {
@@ -22,5 +34,9 @@ public abstract class Grammar {
         System.exit(-1);
     }
 
+    /**
+     * Parses the token appropriately.
+     * @param s scanner
+     */
     public abstract void parse(Scanner s);
 }

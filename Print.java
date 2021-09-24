@@ -48,6 +48,10 @@ public class Print {
         return print;
     }
 
+    /**
+     * Increases indentation.
+     * Also makes a new layer in the scope stack.
+     */
     public void increaseIndent() {
         indentNum++;
         intScopes.push(intScope);
@@ -56,12 +60,19 @@ public class Print {
         refScope = new HashSet<>();
     }
 
+    /**
+     * Decreases indentation.
+     * Also removes one layer of scope stack (because going out of scope).
+     */
     public void decreaseIndent() {
         indentNum--;
         intScopes.pop();
         refScopes.pop();
     }
 
+    /**
+     * Prints the entire program.
+     */
     public void print() {
         for (String line : fullCode) {
             System.out.println(line);
@@ -247,6 +258,11 @@ public class Print {
         }
     }
 
+    /**
+     * Performs semantic check on the int variables.
+     * Prints error message and terminates program when error is detected.
+     * @param var int variable
+     */
     private void checkSemanticInt(String var) {
         // check if declaring or just checking if declared
         if (declaringInt) {
@@ -263,6 +279,11 @@ public class Print {
         }
     }
 
+    /**
+     * Performs semantic checks on the ref variables.
+     * Prints error message and terminates program when error is detected.
+     * @param var ref variable
+     */
     private void checkSemanticRef(String var) {
         if (declaringRef) {
             if (refVariableExists(var)) {
@@ -278,6 +299,11 @@ public class Print {
         }
     }
 
+    /**
+     * Performs sementic checks when there is ASSIGN being performed between two variables.
+     * Prints error message and terminates program when error is detected.
+     * @param var variable
+     */
     private void checkSemanticAssign(String var) {
         // check if var even exists
         if (!intVariableExists(var) && !refVariableExists(var)) {
@@ -293,6 +319,11 @@ public class Print {
         }
     }
 
+    /**
+     * Checks if the variable exists in the int scope stack.
+     * @param var int variable
+     * @return true if exists
+     */
     private boolean intVariableExists(String var) {
         // check the current scope
         if (intScope.contains(var)) return true;
@@ -307,6 +338,11 @@ public class Print {
         return false;
     }
 
+    /**
+     * Checks if the variable exists in the ref scope stack.
+     * @param var ref variable
+     * @return true if exists
+     */
     private boolean refVariableExists(String var) {
         // check the current scope
         if (refScope.contains(var)) return true;
