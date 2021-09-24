@@ -29,15 +29,14 @@ public class If extends Grammar {
         if (s.currentToken() == Core.ENDIF) {
             return;
         } else if (s.currentToken() == Core.ELSE) {
+            s.nextToken();
             ss = new StmtSeq();
             ss.parse(s);
             
-            s.nextToken();
             // verify if ENDIF
             if (s.currentToken() != Core.ENDIF) {
                 error(s.currentToken(), Core.ENDIF);
             }
-            s.nextToken();
         } else {
             error(s.currentToken(), Core.ENDIF, Core.ELSE);
         }

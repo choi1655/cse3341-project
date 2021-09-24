@@ -119,6 +119,16 @@ public class Print {
             case OUTPUT:
                 buffer.append("output ");
                 break;
+            case ELSE:
+                decreaseIndent();
+                buffer = new StringBuilder();
+                for (int i = 0; i < indentNum; i++) {
+                    buffer.append("\t");
+                }
+                buffer.append("else");
+                increaseIndent();
+                flush();
+                break;
             default:
                 buffer.append(s.currentToken().toString());
                 break;
