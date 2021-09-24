@@ -90,7 +90,7 @@ echo ""
 echo ""
 echo "Running 08.error:"
 timeout 5 ${runner} Error/08.code
-read -n 1 -p "Error is int variable used in 'id = class id' assignment. Error message related to that? (y/n)" mainmenuinput
+read -n 1 -p "Error is int variable used in 'id = ref id' assignment. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then
 	error=$(($error + 1))
 fi

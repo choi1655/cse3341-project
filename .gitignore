@@ -4,4 +4,6 @@
 .vscode/
 # Java class files
 *.class
+# temporary output file
+output.txt
 
