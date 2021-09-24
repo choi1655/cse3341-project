@@ -33,6 +33,8 @@ Files:
 		Singleton class that handles printing the parsed code.
 		Contains addCode() method that will take in tokens one by one and decide if the line should be terminated
 		depending on the token.
+		Print also performs semantic checks along the way. Every time it parses a variable, it verifies that the
+		variable is usable and the usage is valid.
 
 	Core.java
 		TS (teaching staff) provided Java enum
@@ -49,6 +51,5 @@ Special Features/Comments:
 
 Known Bugs:
 
-	Because I ran out of time, I did not handle semantic checking. The syntax checks, however, are expected to work.
 	
 
