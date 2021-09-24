@@ -83,6 +83,9 @@ public class Print {
                 buffer.append("end");
                 flush();
                 break;
+            case SUB:
+                buffer.append("-");
+                break;
             default:
                 buffer.append(s.currentToken().toString());
                 break;

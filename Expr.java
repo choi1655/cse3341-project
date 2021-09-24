@@ -16,8 +16,6 @@ public class Expr extends Grammar {
 
             expression = new Expr();
             expression.parse(s);
-
-            s.nextToken();
         }
     }
 
