@@ -14,7 +14,9 @@ public class DeclSeq extends Grammar {
             ds = new DeclSeq();
             ds.parse(s);
 
-            s.nextToken();
+            if (s.currentToken() != Core.BEGIN) {
+                s.nextToken();
+            }
         }
     }
 }
