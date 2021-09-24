@@ -9,24 +9,7 @@ class Main {
 		// TODO: Perform Semantic checks on the parse tree
 		
 		Print p = Print.instance();
-		// TODO: Print the Core program from parse tree
+		// print the Core program if all checks pass
 		p.print();
-
-		// // Print the token stream
-		// while (s.currentToken() != Core.EOF && s.currentToken() != Core.ERROR) {
-		// 	// Print the current token, with any extra data needed
-		// 	System.out.print(s.currentToken());
-		// 	if (s.currentToken() == Core.ID) {
-		// 		String value = s.getID();
-		// 		System.out.print("[" + value + "]");
-		// 	} else if (s.currentToken() == Core.CONST) {
-		// 		int value = s.getCONST();
-		// 		System.out.print("[" + value + "]");
-		// 	}
-		// 	System.out.print("\n");
-
-		// 	// Advance to the next token
-		// 	s.nextToken();
-		// }
 	}
 }

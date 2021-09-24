@@ -1,115 +1,153 @@
 Attempting to compile...
+
 Running 1.code
-Comparing with 1.expected
+Running with 1.expected
 Print looks good
+
 Running 2.code
-Comparing with 2.expected
+Running with 2.expected
 Print looks good
+
 Running 3.code
-Comparing with 3.expected
+Running with 3.expected
 Print looks good
+
 Running 4.code
-Comparing with 4.expected
+Running with 4.expected
 Print looks good
+
 Running 5.code
-Comparing with 5.expected
+Running with 5.expected
 Print looks good
+
 Running 6.code
-Comparing with 6.expected
+Running with 6.expected
 Print looks good
+
 Running 7.code
-Comparing with 7.expected
+Running with 7.expected
 Print looks good
+
 Running 8.code
-Comparing with 8.expected
+Running with 8.expected
 Print looks good
+
 Running 9.code
-Comparing with 9.expected
+Running with 9.expected
 Print looks good
+
 Running 10.code
-Comparing with 10.expected
+Running with 10.expected
 Print looks good
+
 Running 11.code
-Comparing with 11.expected
+Running with 11.expected
 Print looks good
+
 Running 12.code
-Comparing with 12.expected
+Running with 12.expected
 Print looks good
+
 Running 13.code
-Comparing with 13.expected
+Running with 13.expected
+Print looks good
+
+Running 14.code
+Running with 14.expected
+Print looks good
+
+Running 15.code
+Running with 15.expected
+Print looks good
+
+Running 16.code
+Running with 16.expected
+Print looks good
+
+Running 17.code
+Running with 17.expected
+Print looks good
+
+Running 18.code
+Running with 18.expected
+Print looks good
+
+Running 19.code
+Running with 19.expected
+Print looks good
+
+Running 20.code
+Running with 20.expected
+Print looks good
+
+Running 21.code
+Running with 21.expected
+Print looks good
+
+Running 22.code
+Running with 22.expected
+Print looks good
+
+Running 23.code
+Running with 23.expected
+Print looks good
+
+Running 24.code
+Running with 24.expected
+Print looks good
+
+Running 25.code
+Running with 25.expected
+Print looks good
+
+Running 26.code
+Running with 26.expected
 Print looks good
 
 Running error cases:
 
-Running 1.error:
-PROGRAM
-INT
-ID[X]
-COMMA
-ID[Y]
-COMMA
-ID[XY]
-SEMICOLON
-BEGIN
-INPUT
-ID[X]
-SEMICOLON
-ID[Y]
-ID[:]
-ASSIGN
-CONST[0]
-SEMICOLON
-ID[EOS]
-INPUT
-ID[XY]
-COMMA
-ID[Y]
-SEMICOLON
-OUTPUT
-ID[XY]
-SEMICOLON
-ID[Y]
-ID[::]
-ASSIGN
-ID[Y]
-ADD
-ID[XY]
-SEMICOLON
-ID[X]
-ID[:]
-ASSIGN
-ID[X]
-SUB
-CONST[1]
-SEMICOLON
-WHILE
-CONST[0]
-LESS
-ID[X]
-BEGIN
-INPUT
-ID[XY]
-SEMICOLON
-OUTPUT
-ID[XY]
-SEMICOLON
-ID[Y]
-ID[:]
-ASSIGN
-ID[Y]
-ADD
-ID[XY]
-SEMICOLON
-ID[X]
-ID[:]
-ASSIGN
-ID[X]
-SUB
-CONST[1]
-SEMICOLON
-ENDWHILE
-SEMICOLON
-OUTPUT
-ID[Y]
-SEMICOLON
-END
+Running 01.error:
+ERROR: expected one of these: [
+	ID
+	CONST
+	LPAREN
+], but got ADD
+program
+	int x;
+begin
+In Factor.java:
+Method: parse
+Line num: 11
+
+In Term.java:
+Method: parse
+Line num: 11
+
+In Expr.java:
+Method: parse
+Line num: 11
+
+In Expr.java:
+Method: parse
+Line num: 18
+
+In Assign.java:
+Method: parse
+Line num: 41
+
+In Stmt.java:
+Method: parse
+Line num: 22
+
+In StmtSeq.java:
+Method: parse
+Line num: 25
+
+In Prog.java:
+Method: parse
+Line num: 29
+
+In Main.java:
+Method: main
+Line num: 7
+

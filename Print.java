@@ -1,6 +1,14 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Singleton class that handles code printing.
+ * Stores each line of the parsed code in an ArrayList.
+ * Buffer is used to construct and store each line.
+ * Indentation is handled using a int variable.
+ * @author John Choi
+ * @version 09242021
+ */
 public class Print {
     
     private StringBuilder buffer = new StringBuilder();
@@ -12,9 +20,12 @@ public class Print {
 
     private boolean beginUsed = false;
 
-    private Print() {
-    }
+    private Print() {}
 
+    /**
+     * Returns singleton instance of this class.
+     * @return instance
+     */
     public static Print instance() {
         if (print != null) {
             return print;
@@ -37,6 +48,11 @@ public class Print {
         }
     }
 
+    /**
+     * Adds token by token to construct a single line of code.
+     * Contains protocols for each Core enums (tokens) and changes line when appropriate.
+     * @param s scanner
+     */
     public void addCode(Scanner s) {
         if (s == null || s.currentToken() == null) {
             return;
@@ -89,12 +105,6 @@ public class Print {
                     increaseIndent();
                     beginUsed = true;
                 }
-                // indentNum = 0;
-                //     buffer = new StringBuilder();
-                //     buffer.append("begin");
-                //     flush();
-                //     increaseIndent();
-                
                 break;
             case END:
                 indentNum = 0;
@@ -193,6 +203,9 @@ public class Print {
         }
     }
 
+    /**
+     * Completes the current line and prepares for new line by adding appropriate indentation.
+     */
     private void flush() {
         fullCode.add(buffer.toString());
         buffer = new StringBuilder();
@@ -202,82 +215,3 @@ public class Print {
         }
     }
 }
-
-/*
-switch (s.currentToken()) {
-    case ADD:
-        break;
-    case ASSIGN:
-        break;
-    case BEGIN:
-        break;
-    case CLASS:
-        break;
-    case COMMA:
-        break;
-    case CONST:
-        break;
-    case DEFINE:
-        break;
-    case ELSE:
-        break;
-    case END:
-        break;
-    case ENDCLASS:
-        break;
-    case ENDFUNC:
-        break;
-    case ENDIF:
-        break;
-    case ENDWHILE:
-        break;
-    case EOF:
-        break;
-    case EQUAL:
-        break;
-    case ERROR:
-        break;
-    case EXTENDS:
-        break;
-    case ID:
-        break;
-    case IF:
-        break;
-    case INPUT:
-        break;
-    case INT:
-        break;
-    case LESS:
-        break;
-    case LESSEQUAL:
-        break;
-    case LPAREN:
-        break;
-    case MULT:
-        break;
-    case NEGATION:
-        break;
-    case NEW:
-        break;
-    case OR:
-        break;
-    case OUTPUT:
-        break;
-    case PROGRAM:
-        break;
-    case REF:
-        break;
-    case RPAREN:
-        break;
-    case SEMICOLON:
-        break;
-    case SUB:
-        break;
-    case THEN:
-        break;
-    case WHILE:
-        break;
-    default:
-        break;
-
-}*/
