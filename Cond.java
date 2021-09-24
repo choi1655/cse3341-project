@@ -26,8 +26,6 @@ public class Cond extends Grammar {
             compare = new Cmpr();
             compare.parse(s);
 
-            s.nextToken();
-            
             // check if OR
             if (s.currentToken() == Core.OR) {
                 s.nextToken();

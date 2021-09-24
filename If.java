@@ -16,7 +16,6 @@ public class If extends Grammar {
         cond = new Cond();
         cond.parse(s);
 
-        s.nextToken();
         // verify if THEN
         if (s.currentToken() != Core.THEN) {
             error(s.currentToken(), Core.THEN);
@@ -26,10 +25,8 @@ public class If extends Grammar {
         ss = new StmtSeq();
         ss.parse(s);
 
-        s.nextToken();
         // verify if ENDIF or ELSE
         if (s.currentToken() == Core.ENDIF) {
-            s.nextToken();
             return;
         } else if (s.currentToken() == Core.ELSE) {
             ss = new StmtSeq();

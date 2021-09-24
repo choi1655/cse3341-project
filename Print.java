@@ -92,6 +92,33 @@ public class Print {
             case MULT:
                 buffer.append("*");
                 break;
+            case EQUAL:
+                buffer.append("==");
+                break;
+            case THEN:
+                buffer.append(" then");
+                fullCode.add(buffer.toString());
+                buffer = new StringBuilder();
+                increaseIndent();
+                for (int i = 0; i < indentNum; i++) {
+                    buffer.append("\t");
+                }
+                break;
+            case IF:
+                buffer.append("if ");
+                break;
+            case ENDIF:
+                decreaseIndent();
+                buffer = new StringBuilder();
+                for (int i = 0; i < indentNum; i++) {
+                    buffer.append("\t");
+                }
+                buffer.append("endif");
+                flush();
+                break;
+            case OUTPUT:
+                buffer.append("output ");
+                break;
             default:
                 buffer.append(s.currentToken().toString());
                 break;

@@ -15,12 +15,10 @@ public class Out extends Grammar {
         expression = new Expr();
         expression.parse(s);
 
-        s.nextToken();
         // verify if semicolon
         if (s.currentToken() != Core.SEMICOLON) {
             error(s.currentToken(), Core.SEMICOLON);
         }
-        s.nextToken();
     }
 
 }
