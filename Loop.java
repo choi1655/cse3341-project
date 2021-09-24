@@ -17,7 +17,6 @@ public class Loop extends Grammar {
         cond = new Cond();
         cond.parse(s);
 
-        s.nextToken();
         // verify if BEGIN
         if (s.currentToken() != Core.BEGIN) {
             error(s.currentToken(), Core.BEGIN);
@@ -27,12 +26,10 @@ public class Loop extends Grammar {
         ss = new StmtSeq();
         ss.parse(s);
 
-        s.nextToken();
         // verify ENDWHILE
         if (s.currentToken() != Core.ENDWHILE) {
             error(s.currentToken(), Core.ENDWHILE);
         }
-        s.nextToken();
     }
 
 }

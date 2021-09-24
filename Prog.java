@@ -10,14 +10,15 @@ public class Prog extends Grammar {
             error(s.currentToken(), Core.PROGRAM);
         }
 
-        s.nextToken();
-
         // could get either begin or DeclSeq
         if (s.currentToken() != Core.BEGIN) {
+            s.nextToken();
+    
             ds = new DeclSeq();
             ds.parse(s);
         }
 
+        s.nextToken();
         // check if current token is BEGIN
         if (s.currentToken() != Core.BEGIN) {
             error(s.currentToken(), Core.BEGIN);

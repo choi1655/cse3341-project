@@ -18,7 +18,7 @@ public class DeclInt extends Grammar {
         if (s.currentToken() != Core.SEMICOLON) {
             error(s.currentToken(), Core.SEMICOLON);
         }
-        s.nextToken(); // consume semicolon
+        // s.nextToken(); // consume semicolon
     }
 
 }

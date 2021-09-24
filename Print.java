@@ -10,6 +10,8 @@ public class Print {
 
     private static Print print;
 
+    private boolean beginUsed = false;
+
     private Print() {
     }
 
@@ -71,11 +73,28 @@ public class Print {
                 buffer.append(s.getCONST());
                 break;
             case BEGIN:
-                indentNum = 0;
-                buffer = new StringBuilder();
-                buffer.append("begin");
-                flush();
-                increaseIndent();
+                if (beginUsed) {
+                    buffer.append(" begin");
+                    fullCode.add(buffer.toString());
+                    buffer = new StringBuilder();
+                    increaseIndent();
+                    for (int i = 0; i < indentNum; i++) {
+                        buffer.append("\t");
+                    }
+                } else {
+                    indentNum = 0;
+                    buffer = new StringBuilder();
+                    buffer.append("begin");
+                    flush();
+                    increaseIndent();
+                    beginUsed = true;
+                }
+                // indentNum = 0;
+                //     buffer = new StringBuilder();
+                //     buffer.append("begin");
+                //     flush();
+                //     increaseIndent();
+                
                 break;
             case END:
                 indentNum = 0;
@@ -94,6 +113,12 @@ public class Print {
                 break;
             case EQUAL:
                 buffer.append("==");
+                break;
+            case LESS:
+                buffer.append("<");
+                break;
+            case LESSEQUAL:
+                buffer.append("<=");
                 break;
             case THEN:
                 buffer.append(" then");
@@ -127,6 +152,18 @@ public class Print {
                 }
                 buffer.append("else");
                 increaseIndent();
+                flush();
+                break;
+            case WHILE:
+                buffer.append("while ");
+                break;
+            case ENDWHILE:
+                decreaseIndent();
+                buffer = new StringBuilder();
+                for (int i = 0; i < indentNum; i++) {
+                    buffer.append("\t");
+                }
+                buffer.append("endwhile");
                 flush();
                 break;
             default:
