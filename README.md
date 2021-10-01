@@ -4,6 +4,7 @@ The Ohio State University Autumn 2021 CSE 3341 (Principles of Programming Langua
 ## Project Description
 * Project 1: Scanner
 * Project 2: Parser
+* Project 3: Interpreter
 
 
 ## Instructor
