@@ -2,8 +2,8 @@
 The Ohio State University Autumn 2021 CSE 3341 (Principles of Programming Languages) Projects 1-4
 
 ## Project Description
-* Project 1: Scanner
-* Project 2: Parser
+* [Project 1: Scanner](https://github.com/choi1655/cse3341-project/tree/project-1)
+* [Project 2: Parser](https://github.com/choi1655/cse3341-project/tree/project-2)
 
 
 ## Instructor
