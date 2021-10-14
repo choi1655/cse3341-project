@@ -8,7 +8,6 @@ class Scanner {
     BufferedReader in;
     StringBuilder token;
     Core t;
-    Print p = Print.instance();
 
     // Initialize the scanner
     Scanner(String filename) {
@@ -22,7 +21,6 @@ class Scanner {
 
     // Advance to the next token
     public Core nextToken() {
-        p.addCode(this);
         try {
             int c = this.in.read();
             // Skip all the white space

@@ -1,25 +1,24 @@
-class DeclClass {
-	IdList list;
+class Input implements Stmt {
+	Id id;
 	
 	public void parse() {
-		Parser.expectedToken(Core.REF);
 		Parser.scanner.nextToken();
-		list = new IdList();
-		list.parse();
+		id = new Id();
+		id.parse();
 		Parser.expectedToken(Core.SEMICOLON);
 		Parser.scanner.nextToken();
 	}
 	
 	public void semantic() {
-		list.semanticRefVars();
+		id.semantic();
 	}
 	
 	public void print(int indent) {
 		for (int i=0; i<indent; i++) {
 			System.out.print("\t");
 		}
-		System.out.print("ref ");
-		list.print();
+		System.out.print("input ");
+		id.print();
 		System.out.println(";");
 	}
 }

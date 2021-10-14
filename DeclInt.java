@@ -1,23 +1,25 @@
-
-
-public class DeclInt extends Grammar {
-
-    private IDList il;
-
-    @Override
-    public void parse(Scanner s) {
-        // make sure current token is INT
-        if (s.currentToken() != Core.INT) {
-            error(s.currentToken(), Core.INPUT);
-        }
-
-        il = new IDList();
-        il.parse(s);
-
-        // make sure next token is semicolon
-        if (s.currentToken() != Core.SEMICOLON) {
-            error(s.currentToken(), Core.SEMICOLON);
-        }
-    }
-
+class DeclInt {
+	IdList list;
+	
+	public void parse() {
+		Parser.expectedToken(Core.INT);
+		Parser.scanner.nextToken();
+		list = new IdList();
+		list.parse();
+		Parser.expectedToken(Core.SEMICOLON);
+		Parser.scanner.nextToken();
+	}
+	
+	public void semantic() {
+		list.semanticIntVars();
+	}
+	
+	public void print(int indent) {
+		for (int i=0; i<indent; i++) {
+			System.out.print("\t");
+		}
+		System.out.print("int ");
+		list.print();
+		System.out.println(";");
+	}
 }

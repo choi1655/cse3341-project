@@ -4,7 +4,7 @@ program
 begin
 	x=5;
 	y=10;
-	if !(x<y) then
+  if !(x<y) then
 		while (0-10)<x begin
 			x=x-1;
 		endwhile
@@ -12,6 +12,6 @@ begin
 		while y<=15 begin
 			y=y+2;
 		endwhile
-	endif
+  endif
 	output y;
 end

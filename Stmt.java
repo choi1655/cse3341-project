@@ -1,25 +1,6 @@
-
-
-public class Stmt extends Grammar {
-
-    private Grammar grammar;
-
-    @Override
-    public void parse(Scanner s) {
-        if (s.currentToken() == Core.ID) {
-            grammar = new Assign();
-        } else if (s.currentToken() == Core.IF) {
-            grammar = new If();
-        } else if (s.currentToken() == Core.WHILE) {
-            grammar = new Loop();
-        } else if (s.currentToken() == Core.INPUT) {
-            grammar = new In();
-        } else if (s.currentToken() == Core.OUTPUT) {
-            grammar = new Out();
-        } else {
-            grammar = new Decl();
-        }
-        grammar.parse(s);
-    }
-
+//Stmt is an interface so we can take advantage of some polymorphism in StmtSeq
+interface Stmt {
+	void parse();
+	void semantic();
+	void print(int indent);
 }

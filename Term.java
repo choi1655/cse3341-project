@@ -1,23 +1,29 @@
-
-
-public class Term extends Grammar {
-
-    private Factor factor;
-    private Term terminal;
-
-    @Override
-    public void parse(Scanner s) {
-        factor = new Factor();
-        factor.parse(s);
-
-        s.nextToken();
-        // check if MULTIPLY
-        if (s.currentToken() == Core.MULT) {
-            s.nextToken();
-
-            terminal = new Term();
-            terminal.parse(s);
-        }
-    }
-
+class Term {
+	Factor factor;
+	Term term;
+	
+	void parse() {
+		factor = new Factor();
+		factor.parse();
+		if (Parser.scanner.currentToken() == Core.MULT) {
+			Parser.scanner.nextToken();
+			term = new Term();
+			term.parse();
+		}				
+	}
+	
+	void semantic() {
+		factor.semantic();
+		if (term != null) {
+			term.semantic();
+		}
+	}
+	
+	void print() {
+		factor.print();
+		if (term != null) {
+			System.out.print("*");
+			term.print();
+		}
+	}
 }
