@@ -21,4 +21,11 @@ class Output implements Stmt {
 		expr.print();
 		System.out.println(";");
 	}
+
+	@Override
+	public void execute(MemoryType memType) {
+		// get the result from expr
+		int exprResult = expr.execute(memType);
+		System.out.println(exprResult);
+	}
 }

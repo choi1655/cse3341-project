@@ -3,6 +3,8 @@ class Factor {
 	int constant;
 	Expr expr;
 	
+	private Memory memory = Memory.instance();
+
 	void parse() {
 		if (Parser.scanner.currentToken() == Core.ID) {
 			id = new Id();
@@ -42,8 +44,15 @@ class Factor {
 		}
 	}
 
-	public int execute() {
-		// TODO: implement
-		return 0;
+	public int execute(MemoryType memType) {
+		int value = 0;
+		if (id != null) {
+			value = memory.getVariableValue(id.identifier);
+		} else if (expr != null) {
+			value = expr.execute(memType);
+		} else {
+			value = constant;
+		}
+		return value;
 	}
 }

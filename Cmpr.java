@@ -1,7 +1,7 @@
 class Cmpr {
 	Expr expr1;
 	Expr expr2;
-	int option;
+	int option; // 0 if equal, 1 if <, 2 if <=
 	
 	void parse() {
 		expr1 = new Expr();
@@ -41,4 +41,22 @@ class Cmpr {
 		}
 		expr2.print();
 	}
+
+    public boolean execute(MemoryType memType) {
+		int result1 = expr1.execute(memType);
+		int result2 = expr2.execute(memType);
+		boolean result = false;
+		switch (option) {
+			case 0:
+				result = result1 == result2;
+				break;
+			case 1:
+				result = result1 < result2;
+				break;
+			case 2:
+				result = result1 <= result2;
+				break;
+		}
+        return result;
+    }
 }

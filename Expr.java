@@ -36,12 +36,12 @@ class Expr {
 		}
 	}
 
-	public int execute() {
-		int value = term.execute();
+	public int execute(MemoryType memType) {
+		int value = term.execute(memType);
 		if (option == 1) {
-			value += expr.execute();
+			value += expr.execute(memType);
 		} else if (option == 2) {
-			value -= expr.execute();
+			value -= expr.execute(memType);
 		}
 		return value;
 	}

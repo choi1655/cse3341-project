@@ -36,4 +36,12 @@ class Loop implements Stmt {
 		}
 		System.out.println("endwhile");
 	}
+
+	@Override
+	public void execute(MemoryType memType) {
+		boolean condition = cond.execute(memType);
+		if (condition) {
+			ss.execute();
+		}
+	}
 }

@@ -7,7 +7,7 @@ class If implements Stmt {
 	
 	public void parse() {
 		Parser.scanner.nextToken();
-		cond = new Cond();;
+		cond = new Cond();
 		cond.parse();
 		Parser.expectedToken(Core.THEN);
 		Parser.scanner.nextToken();
@@ -57,7 +57,12 @@ class If implements Stmt {
 
 	@Override
 	public void execute(MemoryType memType) {
-		// TODO Auto-generated method stub
-		
+		boolean condition = cond.execute(memType);
+		if (condition) {
+			ss1.execute();
+		}
+		if (!condition && ss2 != null) {
+			ss2.execute();
+		}
 	}
 }

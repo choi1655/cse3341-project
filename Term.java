@@ -27,8 +27,11 @@ class Term {
 		}
 	}
 
-	public int execute() {
-		// TODO: implement
-		return 0;
+	public int execute(MemoryType memType) {
+		int factorValue = factor.execute(memType);
+		if (term != null) {
+			factorValue *= term.execute(memType);
+		}
+		return factorValue;
 	}
 }

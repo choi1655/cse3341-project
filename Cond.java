@@ -46,4 +46,16 @@ class Cond {
 			}
 		}
 	}
+
+    public boolean execute(MemoryType memType) {
+        if (cmpr == null) {
+			return !cond.execute(memType);
+		} else {
+			boolean comparison = cmpr.execute(memType);
+			if (cond != null) {
+				comparison = comparison || cond.execute(memType);
+			}
+			return comparison;
+		}
+    }
 }

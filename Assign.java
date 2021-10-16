@@ -73,15 +73,19 @@ class Assign implements Stmt {
 	public void execute(MemoryType memType) {
 		if (type == 1) {
 			// id = new;
-			memory.declareNew(assignTo.identifier);
+			memory.declareNewRef(assignTo.identifier, memType);
 		} else if (type == 2) {
 			// id = ref id;
 			// find id in local and global. Make the index point to 
-			memory.reassign(assignTo.identifier, assignFrom.identifier);
+			memory.reassignRef(assignTo.identifier, assignFrom.identifier);
 		} else {
 			// id = <expr>;
-			int result = expr.execute();
-			memory.addToMemory(assignTo.identifier, result, memType);
+			int result = expr.execute(memType);
+			if (memory.containsVariable(assignTo.identifier, memType)) {
+				memory.reassignInt(assignTo.identifier, result);
+			} else {
+				memory.declareNewInt(assignTo.identifier, result, memType);
+			}
 		}
 	}
 }
