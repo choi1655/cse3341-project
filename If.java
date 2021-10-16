@@ -54,4 +54,10 @@ class If implements Stmt {
 		}
 		System.out.println("endif");
 	}
+
+	@Override
+	public void execute(MemoryType memType) {
+		// TODO Auto-generated method stub
+		
+	}
 }

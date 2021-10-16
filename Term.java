@@ -26,4 +26,9 @@ class Term {
 			term.print();
 		}
 	}
+
+	public int execute() {
+		// TODO: implement
+		return 0;
+	}
 }

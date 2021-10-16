@@ -1,6 +1,7 @@
 class IdList {
 	Id id;
 	IdList list;
+	private Memory memory = Memory.instance();
 	
 	void parse() {
 		id = new Id();
@@ -35,6 +36,20 @@ class IdList {
 		if (list != null) {
 			System.out.print(",");
 			list.print();
+		}
+	}
+
+    public void executeInt(MemoryType memType) {
+		memory.addToMemory(id.identifier, 0, memType);
+		if (list != null) {
+			list.executeInt(memType);
+		}
+    }
+
+	public void executeRef(MemoryType memType) {
+		memory.addToMemory(id.identifier, null, memType);
+		if (list != null) {
+			list.executeInt(memType);
 		}
 	}
 }

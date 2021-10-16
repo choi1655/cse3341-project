@@ -6,6 +6,8 @@ class Assign implements Stmt {
 	// assignFrom is the id on RHS of "ref" assignment
 	Id assignFrom;
 	Expr expr;
+
+	private Memory memory = Memory.instance();
 	
 	public void parse() {
 		assignTo = new Id();
@@ -65,5 +67,21 @@ class Assign implements Stmt {
 			expr.print();
 		}
 		System.out.println(";");
+	}
+
+	@Override
+	public void execute(MemoryType memType) {
+		if (type == 1) {
+			// id = new;
+			memory.declareNew(assignTo.identifier);
+		} else if (type == 2) {
+			// id = ref id;
+			// find id in local and global. Make the index point to 
+			memory.reassign(assignTo.identifier, assignFrom.identifier);
+		} else {
+			// id = <expr>;
+			int result = expr.execute();
+			memory.addToMemory(assignTo.identifier, result, memType);
+		}
 	}
 }

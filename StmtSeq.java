@@ -42,4 +42,11 @@ class StmtSeq {
 			ss.print(indent);
 		}
 	}
+
+	public void execute() {
+		stmt.execute(MemoryType.STACK); // local section at this point so stack memory
+		if (ss != null) {
+			ss.execute();
+		}
+	}
 }

@@ -1,7 +1,7 @@
 class Expr {
 	Term term;
 	Expr expr;
-	int option;
+	int option; // 0 if just a term, 1 if addition, 2 if subtraction
 	
 	void parse() {
 		term  = new Term();
@@ -34,5 +34,15 @@ class Expr {
 			System.out.print("-");
 			expr.print();
 		}
+	}
+
+	public int execute() {
+		int value = term.execute();
+		if (option == 1) {
+			value += expr.execute();
+		} else if (option == 2) {
+			value -= expr.execute();
+		}
+		return value;
 	}
 }

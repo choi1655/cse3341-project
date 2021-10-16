@@ -24,4 +24,11 @@ class DeclSeq {
 			ds.print(indent);
 		}
 	}
+
+    public void execute() {
+		decl.execute(MemoryType.STATIC); // global section at this point so static memory
+		if (ds != null) {
+			ds.execute();
+		}
+    }
 }

@@ -17,7 +17,7 @@ class Factor {
 			Parser.expectedToken(Core.RPAREN);
 			Parser.scanner.nextToken();
 		} else {
-			System.out.println("ERROR: Expected ID, CONST, or LPAREN, recieved " + Parser.scanner.currentToken());
+			System.out.println("ERROR: Expected ID, CONST, or LPAREN, received " + Parser.scanner.currentToken());
 			System.exit(0);
 		}
 	}
@@ -40,5 +40,10 @@ class Factor {
 		} else {
 			System.out.print(constant);
 		}
+	}
+
+	public int execute() {
+		// TODO: implement
+		return 0;
 	}
 }

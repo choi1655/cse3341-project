@@ -22,4 +22,8 @@ class DeclInt {
 		list.print();
 		System.out.println(";");
 	}
+
+    public void execute(MemoryType memType) {
+		list.executeInt(memType);
+    }
 }

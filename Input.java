@@ -21,4 +21,10 @@ class Input implements Stmt {
 		id.print();
 		System.out.println(";");
 	}
+
+	@Override
+	public void execute(MemoryType memType) {
+		// TODO Auto-generated method stub
+		
+	}
 }

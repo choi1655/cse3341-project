@@ -22,4 +22,8 @@ class DeclClass {
 		list.print();
 		System.out.println(";");
 	}
+
+    public void execute(MemoryType memType) {
+		list.executeRef(memType);
+    }
 }

@@ -27,4 +27,12 @@ class Decl implements Stmt {
 			declClass.print(indent);
 		}
 	}
+
+    public void execute(MemoryType memType) {
+		if (declInt != null) {
+			declInt.execute(memType);
+		} else {
+			declClass.execute(memType);
+		}
+    }
 }
