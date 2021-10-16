@@ -1,5 +1,5 @@
 program
-	int x, y, z;
+	ref x, y, z;
 	int a, b, c;
 begin
 	x = new;
