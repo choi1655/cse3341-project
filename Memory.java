@@ -52,15 +52,18 @@ public class Memory {
     }
 
     public boolean containsVariable(String variable, MemoryType memType) {
-        if (memType == MemoryType.STATIC) {
-            return staticMemory.containsKey(variable);
-        } else {
+        boolean varFound = false;
+        // check local stack first
+        if (memType != MemoryType.STACK) {
+            // check local, if DNE check stack
             if (currentStack.containsKey(variable)) {
-                return true;
+                varFound = true;
             } else {
-                return checkEntireStack(variable);
+                varFound = checkEntireStack(variable);
             }
         }
+        // if varFound is still false, check global
+        return !varFound && staticMemory.containsKey(variable);
     }
 
     public boolean checkEntireStack(String variable) {
@@ -290,6 +293,7 @@ public class Memory {
             val = valueInStack(variable);
         } else {
             // if variable doesnt exist in local, must be in global
+            map = staticMemory;
             val = map.get(variable);
         }
 
