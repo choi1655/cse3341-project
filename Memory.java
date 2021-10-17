@@ -339,7 +339,7 @@ public class Memory {
             val = map.get(variable);
         }
 
-        boolean isRef = currentRefs.contains(variable);
+        boolean isRef = currentRefs.contains(variable) || searchRefInStack(variable);
         if (isRef) {
             val = heapMemory.get(val);
         }
