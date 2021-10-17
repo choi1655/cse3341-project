@@ -38,6 +38,23 @@ public class Memory {
         return memory;
     }
 
+    public boolean isRef(String var) {
+        return currentRefs.contains(var) || searchRefInStack(var);
+    }
+
+    public boolean searchRefInStack(String var) {
+        if (refStack.isEmpty()) return false;
+        Set<String> set = refStack.pop();
+        boolean found = false;
+        if (set.contains(var)) {
+            found = true;
+        } else {
+            found = searchRefInStack(var);
+        }
+        refStack.push(set);
+        return found;
+    }
+
     public void incrementScope() {
         stackMemory.push(currentStack);
         currentStack = new HashMap<>();
@@ -104,6 +121,16 @@ public class Memory {
 
     public void declareNewRef(String variable, MemoryType memType) {
         // called in case of id = new type assignment
+        // TODO: check if variable exists
+
+        // if variable exists in stack and has null, we dont need to go further
+        if (checkEntireStack(variable)) {
+            if (getVariableValue(variable) == -1) {
+                return;
+            }
+        }
+        // if variable exists in global and has null, we dont need to go further
+        if (staticMemory.containsKey(variable) && heapMemory.get(staticMemory.get(variable)) == -1) return;
         Map<String, Integer> destinationMap;
         if (memType == MemoryType.STACK) {
             destinationMap = currentStack;
@@ -168,31 +195,46 @@ public class Memory {
         stackMemory.push(map);
     }
 
-    public void reassignInt(String leftSide, int value) {
+    public void reassignInt(String leftSide, int value, boolean isRef) {
         // handles cases like a = 10; a = 11;
         // assuming variable exists
         Map<String, Integer> leftMap;
         // first, check if local has left variable
         if (currentStack.containsKey(leftSide)) {
             leftMap = currentStack;
-            leftMap.replace(leftSide, value);
+            if (isRef) {
+                int idx = leftMap.get(leftSide);
+                heapMemory.set(idx, value);
+            } else {
+                leftMap.replace(leftSide, value);
+            }
         } else if (checkEntireStack(leftSide)) {
-            reassignIntInStack(leftSide, value);
+            reassignIntInStack(leftSide, value, isRef);
         } else {
             // if local doesnt have it, must be somewhere in global
             leftMap = staticMemory;
-            leftMap.replace(leftSide, value);
+            if (isRef) {
+                int idx = leftMap.get(leftSide);
+                heapMemory.set(idx, value);
+            } else {
+                leftMap.replace(leftSide, value);
+            }
         }
     }
 
-    private void reassignIntInStack(String variable, int value) {
+    private void reassignIntInStack(String variable, int value, boolean isRef) {
         if (stackMemory.isEmpty()) throw new IllegalArgumentException("Variable not found");
 
         Map<String, Integer> map = stackMemory.pop();
         if (map.containsKey(variable)) {
-            map.replace(variable, value);
+            if (isRef) {
+                int idx = map.get(variable);
+                heapMemory.set(idx, value);
+            } else {
+                map.replace(variable, value);
+            }
         } else {
-            reassignRefInStack(variable, value);
+            reassignIntInStack(variable, value, isRef);
         }
         stackMemory.push(map);
     }

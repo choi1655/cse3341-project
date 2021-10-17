@@ -1,8 +1,2 @@
-program
-	int x,y;
-begin
-	x=1;
-	y=2;
-	output x;
-	output y;
-end
+1
+2

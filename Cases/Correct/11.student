@@ -1,6 +1,1 @@
-program
-	int x;
-begin
-	x=1*2*3*4;
-	output x;
-end
+24

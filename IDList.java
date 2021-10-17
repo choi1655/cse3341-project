@@ -49,7 +49,7 @@ class IDList {
 	public void executeRef(MemoryType memType) {
 		memory.declareNewRef(id.identifier, memType);
 		if (list != null) {
-			list.executeInt(memType);
+			list.executeRef(memType);
 		}
 	}
 }

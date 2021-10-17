@@ -82,7 +82,7 @@ class Assign implements Stmt {
 			// id = <expr>;
 			int result = expr.execute(memType);
 			if (memory.containsVariable(assignTo.identifier, memType)) {
-				memory.reassignInt(assignTo.identifier, result);
+				memory.reassignInt(assignTo.identifier, result, memory.isRef(assignTo.identifier));
 			} else {
 				memory.declareNewInt(assignTo.identifier, result, memType);
 			}
