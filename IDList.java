@@ -40,14 +40,14 @@ class IdList {
 	}
 
     public void executeInt(MemoryType memType) {
-		memory.addToMemory(id.identifier, 0, memType);
+		memory.declareNewInt(id.identifier, 0, memType);
 		if (list != null) {
 			list.executeInt(memType);
 		}
     }
 
 	public void executeRef(MemoryType memType) {
-		memory.addToMemory(id.identifier, null, memType);
+		memory.declareNewRef(id.identifier, memType);
 		if (list != null) {
 			list.executeInt(memType);
 		}
