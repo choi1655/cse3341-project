@@ -59,10 +59,14 @@ class If implements Stmt {
 	public void execute(MemoryType memType) {
 		boolean condition = cond.execute(memType);
 		if (condition) {
+			Memory.instance().incrementScope();
 			ss1.execute();
+			Memory.instance().decrementScope();
 		}
 		if (!condition && ss2 != null) {
+			Memory.instance().incrementScope();
 			ss2.execute();
+			Memory.instance().decrementScope();
 		}
 	}
 }

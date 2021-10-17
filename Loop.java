@@ -41,7 +41,9 @@ class Loop implements Stmt {
 	public void execute(MemoryType memType) {
 		boolean condition = cond.execute(memType);
 		if (condition) {
+			Memory.instance().incrementScope();
 			ss.execute();
+			Memory.instance().decrementScope();
 		}
 	}
 }
