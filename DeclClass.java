@@ -1,10 +1,10 @@
 class DeclClass {
-	IdList list;
+	IDList list;
 	
 	public void parse() {
 		Parser.expectedToken(Core.REF);
 		Parser.scanner.nextToken();
-		list = new IdList();
+		list = new IDList();
 		list.parse();
 		Parser.expectedToken(Core.SEMICOLON);
 		Parser.scanner.nextToken();

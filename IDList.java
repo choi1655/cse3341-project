@@ -1,6 +1,6 @@
-class IdList {
+class IDList {
 	Id id;
-	IdList list;
+	IDList list;
 	private Memory memory = Memory.instance();
 	
 	void parse() {
@@ -8,7 +8,7 @@ class IdList {
 		id.parse();
 		if (Parser.scanner.currentToken() == Core.COMMA) {
 			Parser.scanner.nextToken();
-			list = new IdList();
+			list = new IDList();
 			list.parse();
 		} 
 	}

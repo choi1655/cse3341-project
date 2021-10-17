@@ -1,10 +1,10 @@
 class DeclInt {
-	IdList list;
+	IDList list;
 	
 	public void parse() {
 		Parser.expectedToken(Core.INT);
 		Parser.scanner.nextToken();
-		list = new IdList();
+		list = new IDList();
 		list.parse();
 		Parser.expectedToken(Core.SEMICOLON);
 		Parser.scanner.nextToken();
