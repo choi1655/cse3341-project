@@ -40,10 +40,11 @@ class Loop implements Stmt {
 	@Override
 	public void execute(MemoryType memType) {
 		boolean condition = cond.execute(memType);
-		if (condition) {
+		while (condition) {
 			Memory.instance().incrementScope();
 			ss.execute();
 			Memory.instance().decrementScope();
+			condition = cond.execute(memType);
 		}
 	}
 }
