@@ -22,6 +22,9 @@ public class Memory {
     
     private static Memory memory;
 
+    // minimum value of int to mark NULL values in the heap.
+    private final int NULLVAL = Integer.MIN_VALUE;
+
     private Memory() {
         staticMemory = new HashMap<>();
         stackMemory = new Stack<>();
@@ -121,16 +124,21 @@ public class Memory {
 
     public void declareNewRef(String variable, MemoryType memType) {
         // called in case of id = new type assignment
-        // TODO: check if variable exists
 
         // if variable exists in stack and has null, we dont need to go further
         if (checkEntireStack(variable)) {
-            if (getVariableValue(variable) == -1) {
+            if (getVariableValue(variable) == NULLVAL) {
+                // set it to 0
+                int idx = valueInStack(variable);
+                heapMemory.set(idx, 0);
                 return;
             }
         }
-        // if variable exists in global and has null, we dont need to go further
-        if (staticMemory.containsKey(variable) && heapMemory.get(staticMemory.get(variable)) == -1) return;
+        // if variable exists in global and has null, set it to 0 and we dont need to go further
+        if (staticMemory.containsKey(variable) && heapMemory.get(staticMemory.get(variable)) == NULLVAL) {
+            heapMemory.set(staticMemory.get(variable), 0);
+            return;
+        }
         Map<String, Integer> destinationMap;
         if (memType == MemoryType.STACK) {
             destinationMap = currentStack;
@@ -144,7 +152,7 @@ public class Memory {
             // add this variable to the ref set
             currentRefs.add(variable);
         }
-        heapMemory.add(-1);
+        heapMemory.add(NULLVAL);
     }
 
     public void reassignRef(String leftSide, String rightSide) {
@@ -215,6 +223,11 @@ public class Memory {
             leftMap = staticMemory;
             if (isRef) {
                 int idx = leftMap.get(leftSide);
+                // check if value in heap is null
+                if (heapMemory.get(idx) == NULLVAL) {
+                    System.out.println("ERROR: cannot assign values to null variables.");
+                    System.exit(-1);
+                }
                 heapMemory.set(idx, value);
             } else {
                 leftMap.replace(leftSide, value);
