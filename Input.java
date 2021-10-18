@@ -26,6 +26,11 @@ class Input implements Stmt {
 
 	public void execute(MemoryType memType) {
 		String variable = id.identifier;
+		// check if we have more inputs
+		if (Parser.inputScanner.currentToken() == Core.EOF) {
+			System.out.println("ERROR input scanner hit EOF (no more input)");
+			System.exit(-1);
+		}
 		// read from the .data file and assign to variable
 		int value = Parser.inputScanner.getCONST();
 		// move inputscanner token to next
