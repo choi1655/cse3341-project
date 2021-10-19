@@ -1,21 +1,22 @@
-
-/**
- * Driver of the program.
- * @author John Choi
- * @version 09242021
- */
 class Main {
 	public static void main(String[] args) {
 		// Initialize the scanner with the input file
-		Scanner s = new Scanner(args[0]);
-
-		// root of the parse tree
-		Prog programRoot = new Prog();
-		programRoot.parse(s);
+		Scanner S = new Scanner(args[0]);
+		// scanner for the .data file that simulates user input
+		Scanner userInput = new Scanner(args[1]);
+		Parser.scanner = S;
+		Parser.inputScanner = userInput;
 		
-		// single instance of the Print class
-		Print p = Print.instance();
-		// print the Core program if all checks pass
-		p.print();
+		Program prog = new Program();
+		
+		prog.parse();
+		
+		prog.semantic();
+		
+		// we're not printing anymore
+		// prog.print();
+
+		// we're executing
+		prog.execute();
 	}
 }

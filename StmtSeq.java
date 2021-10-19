@@ -1,38 +1,52 @@
-import java.util.HashSet;
-import java.util.Set;
+class StmtSeq {
+	Stmt stmt;
+	StmtSeq ss;
+	
+	void parse() {
+		if (Parser.scanner.currentToken() == Core.ID) {
+			stmt = new Assign();
+		} else if (Parser.scanner.currentToken() == Core.INPUT) {
+			stmt = new Input();
+		} else if (Parser.scanner.currentToken() == Core.OUTPUT) {
+			stmt = new Output();
+		}  else if (Parser.scanner.currentToken() == Core.IF) {
+			stmt = new If();
+		} else if (Parser.scanner.currentToken() == Core.WHILE) {
+			stmt = new Loop();
+		}  else if (Parser.scanner.currentToken() == Core.INT || Parser.scanner.currentToken() == Core.REF) {
+			stmt = new Decl();
+		} else {
+			System.out.println("ERROR: Bad start to statement: " + Parser.scanner.currentToken());
+			System.exit(0);
+		}
+		stmt.parse();
+		if ((Parser.scanner.currentToken() != Core.END) 
+			&& (Parser.scanner.currentToken() != Core.ENDIF)
+			&& (Parser.scanner.currentToken() != Core.ENDWHILE)
+			&& (Parser.scanner.currentToken() != Core.ELSE)) {
+			ss = new StmtSeq();
+			ss.parse();
+		}
+	}
+	
+	void semantic() {
+		stmt.semantic();
+		if (ss != null) {
+			ss.semantic();
+		}
+	}
+			
+	void print(int indent) {
+		stmt.print(indent);
+		if (ss != null) {
+			ss.print(indent);
+		}
+	}
 
-public class StmtSeq extends Grammar {
-
-    private Stmt statement;
-    private StmtSeq ss;
-
-    private Set<Core> stmtTokens;
-    
-    public StmtSeq() {
-        stmtTokens = new HashSet<>();
-        stmtTokens.add(Core.ID);
-        stmtTokens.add(Core.IF);
-        stmtTokens.add(Core.WHILE);
-        stmtTokens.add(Core.INPUT);
-        stmtTokens.add(Core.OUTPUT);
-        stmtTokens.add(Core.INT);
-        stmtTokens.add(Core.REF);
-    }
-
-    @Override
-    public void parse(Scanner s) {
-        statement = new Stmt();
-        statement.parse(s);
-
-        /**
-         * To figure out if the <stmt-seq> continues, you can either look for what a <stmt> 
-         * would start with (IF, ID, WHILE, INPUT, OUTPUT, INT)
-         */
-        if (!stmtTokens.contains(s.currentToken())) s.nextToken();
-        if (stmtTokens.contains(s.currentToken())) {
-            ss = new StmtSeq();
-            ss.parse(s);
-        }
-    }
-    
+	public void execute() {
+		stmt.execute(MemoryType.STACK); // local section at this point so stack memory
+		if (ss != null) {
+			ss.execute();
+		}
+	}
 }

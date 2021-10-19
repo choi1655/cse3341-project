@@ -1,23 +1,55 @@
+class IDList {
+	Id id;
+	IDList list;
+	private Memory memory = Memory.instance();
+	
+	void parse() {
+		id = new Id();
+		id.parse();
+		if (Parser.scanner.currentToken() == Core.COMMA) {
+			Parser.scanner.nextToken();
+			list = new IDList();
+			list.parse();
+		} 
+	}
+	
+	// Called by DeclInt.semantic
+	void semanticIntVars() {
+		id.doublyDeclared();
+		id.addToScopes(Core.INT);
+		if (list != null) {
+			list.semanticIntVars();
+		}
+	}
+	
+	// Called by DeclClass.semantic
+	void semanticRefVars() {
+		id.doublyDeclared();
+		id.addToScopes(Core.REF);
+		if (list != null) {
+			list.semanticRefVars();
+		}
+	}
+	
+	void print() {
+		id.print();
+		if (list != null) {
+			System.out.print(",");
+			list.print();
+		}
+	}
 
-
-public class IDList extends Grammar {
-
-    private IDList il;
-
-    @Override
-    public void parse(Scanner s) {
-        // make sure token is ID
-        s.nextToken();
-        if (s.currentToken() != Core.ID) {
-            error(s.currentToken(), Core.ID);
-        }
-
-        s.nextToken();
-        // if token is comma, theres more
-        if (s.currentToken() == Core.COMMA) {
-            il = new IDList();
-            il.parse(s);
-        }
+    public void executeInt(MemoryType memType) {
+		memory.declareNewInt(id.identifier, 0, memType);
+		if (list != null) {
+			list.executeInt(memType);
+		}
     }
 
+	public void executeRef(MemoryType memType) {
+		memory.declareNewRef(id.identifier, memType);
+		if (list != null) {
+			list.executeRef(memType);
+		}
+	}
 }

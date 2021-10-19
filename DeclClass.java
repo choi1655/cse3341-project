@@ -1,23 +1,29 @@
+class DeclClass {
+	IDList list;
+	
+	public void parse() {
+		Parser.expectedToken(Core.REF);
+		Parser.scanner.nextToken();
+		list = new IDList();
+		list.parse();
+		Parser.expectedToken(Core.SEMICOLON);
+		Parser.scanner.nextToken();
+	}
+	
+	public void semantic() {
+		list.semanticRefVars();
+	}
+	
+	public void print(int indent) {
+		for (int i=0; i<indent; i++) {
+			System.out.print("\t");
+		}
+		System.out.print("ref ");
+		list.print();
+		System.out.println(";");
+	}
 
-
-public class DeclClass extends Grammar {
-
-    private IDList il;
-
-    @Override
-    public void parse(Scanner s) {
-        // make sure current token is REF
-        if (s.currentToken() != Core.REF) {
-            error(s.currentToken(), Core.REF);
-        }
-        il = new IDList();
-        il.parse(s);
-
-        // expected semicolon
-        if (s.currentToken() != Core.SEMICOLON) {
-            error(s.currentToken(), Core.SEMICOLON);
-        }
-        s.nextToken(); // consume semicolon
+    public void execute(MemoryType memType) {
+		list.executeRef(memType);
     }
-
 }

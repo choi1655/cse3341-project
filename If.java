@@ -1,45 +1,72 @@
+import java.util.*;
 
+class If implements Stmt {
+	Cond cond;
+	StmtSeq ss1;
+	StmtSeq ss2;
+	
+	public void parse() {
+		Parser.scanner.nextToken();
+		cond = new Cond();
+		cond.parse();
+		Parser.expectedToken(Core.THEN);
+		Parser.scanner.nextToken();
+		ss1 = new StmtSeq();
+		ss1.parse();
+		if (Parser.scanner.currentToken() == Core.ELSE) {
+			Parser.scanner.nextToken();
+			ss2 = new StmtSeq();
+			ss2.parse();
+		}
+		Parser.expectedToken(Core.ENDIF);
+		Parser.scanner.nextToken();
+	}
+	
+	public void semantic() {
+		cond.semantic();
+		Parser.scopes.push(new HashMap<String, Core>());
+		ss1.semantic();
+		Parser.scopes.pop();
+		if (ss2 != null) {
+			Parser.scopes.push(new HashMap<String, Core>());
+			ss2.semantic();
+			Parser.scopes.pop();
+		}
+	}
+	
+	public void print(int indent) {
+		for (int i=0; i<indent; i++) {
+			System.out.print("  ");
+		}
+		System.out.print("if ");
+		cond.print();
+		System.out.println(" then");
+		ss1.print(indent+1);
+		if (ss2 != null) {
+			for (int i=0; i<indent; i++) {
+				System.out.print("	");
+			}
+			System.out.println("else");
+			ss2.print(indent+1);
+		}
+		for (int i=0; i<indent; i++) {
+			System.out.print("  ");
+		}
+		System.out.println("endif");
+	}
 
-public class If extends Grammar {
-
-    private Cond cond;
-    private StmtSeq ss;
-
-    @Override
-    public void parse(Scanner s) {
-        // verify if IF
-        if (s.currentToken() != Core.IF) {
-            error(s.currentToken(), Core.IF);
-        }
-        
-        s.nextToken();
-        cond = new Cond();
-        cond.parse(s);
-
-        // verify if THEN
-        if (s.currentToken() != Core.THEN) {
-            error(s.currentToken(), Core.THEN);
-        }
-
-        s.nextToken();
-        ss = new StmtSeq();
-        ss.parse(s);
-
-        // verify if ENDIF or ELSE
-        if (s.currentToken() == Core.ENDIF) {
-            return;
-        } else if (s.currentToken() == Core.ELSE) {
-            s.nextToken();
-            ss = new StmtSeq();
-            ss.parse(s);
-            
-            // verify if ENDIF
-            if (s.currentToken() != Core.ENDIF) {
-                error(s.currentToken(), Core.ENDIF);
-            }
-        } else {
-            error(s.currentToken(), Core.ENDIF, Core.ELSE);
-        }
-    }
-
+	@Override
+	public void execute(MemoryType memType) {
+		boolean condition = cond.execute(memType);
+		if (condition) {
+			Memory.instance().incrementScope();
+			ss1.execute();
+			Memory.instance().decrementScope();
+		}
+		if (!condition && ss2 != null) {
+			Memory.instance().incrementScope();
+			ss2.execute();
+			Memory.instance().decrementScope();
+		}
+	}
 }

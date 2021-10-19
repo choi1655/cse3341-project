@@ -1,22 +1,34 @@
-public class DeclSeq extends Grammar {
-    
-    private Decl d;
-    private DeclSeq ds;
+class DeclSeq {
+	Decl decl;
+	DeclSeq ds;
+	
+	void parse() {
+		decl = new Decl();
+		decl.parse();
+		if (Parser.scanner.currentToken() != Core.BEGIN) {
+			ds = new DeclSeq();
+			ds.parse();
+		}
+	}
+	
+	void semantic() {
+		decl.semantic();
+		if (ds != null) {
+			ds.semantic();
+		}
+	}
+	
+	void print(int indent) {
+		decl.print(indent);
+		if (ds != null) {
+			ds.print(indent);
+		}
+	}
 
-    @Override
-    public void parse(Scanner s) {
-        d = new Decl();
-        d.parse(s);
-
-        if (s.currentToken() == Core.SEMICOLON) s.nextToken();
-        if (s.currentToken() == Core.BEGIN) return;
-        if (s.currentToken() == Core.INT) {
-            ds = new DeclSeq();
-            ds.parse(s);
-
-            if (s.currentToken() != Core.BEGIN) {
-                s.nextToken();
-            }
-        }
+    public void execute() {
+		decl.execute(MemoryType.STATIC); // global section at this point so static memory
+		if (ds != null) {
+			ds.execute();
+		}
     }
 }

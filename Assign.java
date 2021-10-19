@@ -1,50 +1,91 @@
+class Assign implements Stmt {
+	// type is 1 if "new" assignment, 2 if "ref" assignment, 3 if "<expr>" assignment
+	int type;
+	// assignTo is the id on the LHS of assignment
+	Id assignTo;
+	// assignFrom is the id on RHS of "ref" assignment
+	Id assignFrom;
+	Expr expr;
 
+	private Memory memory = Memory.instance();
+	
+	public void parse() {
+		assignTo = new Id();
+		assignTo.parse();
+		Parser.expectedToken(Core.ASSIGN);
+		Parser.scanner.nextToken();
+		if (Parser.scanner.currentToken() == Core.NEW) {
+			type = 1;
+			Parser.scanner.nextToken();
+		} else if (Parser.scanner.currentToken() == Core.REF) {
+			type = 2;
+			Parser.scanner.nextToken();
+			assignFrom = new Id();
+			assignFrom.parse();
+		} else {
+			type = 3;
+			expr = new Expr();
+			expr.parse();
+		}
+		Parser.expectedToken(Core.SEMICOLON);
+		Parser.scanner.nextToken();
+	}
+	
+	public void semantic() {
+		assignTo.semantic();
+		if (type == 1) {
+			if (assignTo.checkType() != Core.REF) {
+				System.out.println("ERROR: int variable used in new assignment");
+				System.exit(0);
+			}
+		} else if (type == 2) {
+			if (assignTo.checkType() != Core.REF) {
+				System.out.println("ERROR: int variable used in ref assignment");
+				System.exit(0);
+			}
+			if (assignFrom.checkType() != Core.REF) {
+				System.out.println("ERROR: int variable used in ref assignment");
+				System.exit(0);
+			}
+		} else {
+			expr.semantic();
+		}
+	}
+	
+	public void print(int indent) {
+		for (int i=0; i<indent; i++) {
+			System.out.print("\t");
+		}
+		assignTo.print();
+		System.out.print("=");
+		if (type == 1) {
+			System.out.print("new");
+		} else if (type == 2) {
+			System.out.print("ref ");
+			assignFrom.print();
+		} else {
+			expr.print();
+		}
+		System.out.println(";");
+	}
 
-public class Assign extends Grammar {
-
-    private Expr expression;
-
-    @Override
-    public void parse(Scanner s) {
-        // make sure token is ID
-        if (s.currentToken() != Core.ID) {
-            error(s.currentToken(), Core.ID);
-        }
-
-        // consume equal sign (ASSIGN) and verify
-        s.nextToken();
-        if (s.currentToken() != Core.ASSIGN) {
-            error(s.currentToken(), Core.ASSIGN);
-        }
-
-        // consume next token - check if new or ref
-        s.nextToken();
-        if (s.currentToken() == Core.NEW) {
-            s.nextToken();
-            // verify if semicolon
-            if (s.currentToken() != Core.SEMICOLON) {
-                error(s.currentToken(), Core.SEMICOLON);
-            }
-        } else if (s.currentToken() == Core.REF) {
-            s.nextToken();
-            // verify if ID
-            if (s.currentToken() != Core.ID) {
-                error(s.currentToken(), Core.ID);
-            }
-            s.nextToken();
-            // verify if semicolon
-            if (s.currentToken() != Core.SEMICOLON) {
-                error(s.currentToken(), Core.SEMICOLON);
-            }
-        } else {
-            expression = new Expr();
-            expression.parse(s);
-
-            // verify if semicolon
-            if (s.currentToken() != Core.SEMICOLON) {
-                error(s.currentToken(), Core.SEMICOLON);
-            }
-        }
-    }
-
+	@Override
+	public void execute(MemoryType memType) {
+		if (type == 1) {
+			// id = new;
+			memory.declareNewRef(assignTo.identifier, memType);
+		} else if (type == 2) {
+			// id = ref id;
+			// find id in local and global. Make the index point to 
+			memory.reassignRef(assignTo.identifier, assignFrom.identifier);
+		} else {
+			// id = <expr>;
+			int result = expr.execute(memType);
+			if (memory.containsVariable(assignTo.identifier, memType)) {
+				memory.reassignInt(assignTo.identifier, result, memory.isRef(assignTo.identifier));
+			} else {
+				memory.declareNewInt(assignTo.identifier, result, memType);
+			}
+		}
+	}
 }
