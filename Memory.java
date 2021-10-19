@@ -74,7 +74,7 @@ public class Memory {
     public boolean containsVariable(String variable, MemoryType memType) {
         boolean varFound = false;
         // check local stack first
-        if (memType != MemoryType.STACK) {
+        if (memType == MemoryType.STACK) {
             // check local, if DNE check stack
             if (currentStack.containsKey(variable)) {
                 varFound = true;
@@ -83,7 +83,11 @@ public class Memory {
             }
         }
         // if varFound is still false, check global
-        return !varFound && staticMemory.containsKey(variable);
+        if (!varFound) {
+            return staticMemory.containsKey(variable);
+        } else {
+            return true;
+        }
     }
 
     public boolean checkEntireStack(String variable) {
@@ -119,12 +123,22 @@ public class Memory {
         if (memType == MemoryType.STACK) {
             destination = currentStack;
         }
-        destination.put(variable, value);
+        if (isRef(variable)) {
+            int idx = destination.get(variable);
+            heapMemory.set(idx, value);
+        } else {
+            destination.put(variable, value);
+        }
     }
 
     public void declareNewRef(String variable, MemoryType memType) {
         // called in case of id = new type assignment
 
+        if (currentStack.containsKey(variable)) {
+            int idx = currentStack.get(variable);
+            heapMemory.set(idx, 0);
+            return;
+        }
         // if variable exists in stack and has null, we dont need to go further
         if (checkEntireStack(variable)) {
             if (getVariableValue(variable) == NULLVAL) {
@@ -139,20 +153,18 @@ public class Memory {
             heapMemory.set(staticMemory.get(variable), 0);
             return;
         }
+
+        // at this point, we know ref is a brand new variable
+
         Map<String, Integer> destinationMap;
         if (memType == MemoryType.STACK) {
             destinationMap = currentStack;
         } else {
             destinationMap = staticMemory;
         }
-        if (destinationMap.containsKey(variable)) {
-            destinationMap.replace(variable, heapMemory.size());
-        } else {
-            destinationMap.put(variable, heapMemory.size());
-            // add this variable to the ref set
-            currentRefs.add(variable);
-        }
+        destinationMap.put(variable, heapMemory.size());
         heapMemory.add(NULLVAL);
+        currentRefs.add(variable);
     }
 
     public void reassignRef(String leftSide, String rightSide) {
