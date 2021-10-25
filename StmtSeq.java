@@ -28,13 +28,6 @@ class StmtSeq {
 			ss.parse();
 		}
 	}
-	
-	void semantic() {
-		stmt.semantic();
-		if (ss != null) {
-			ss.semantic();
-		}
-	}
 			
 	void print(int indent) {
 		stmt.print(indent);
@@ -42,9 +35,9 @@ class StmtSeq {
 			ss.print(indent);
 		}
 	}
-
-	public void execute() {
-		stmt.execute(MemoryType.STACK); // local section at this point so stack memory
+	
+	void execute() {
+		stmt.execute();
 		if (ss != null) {
 			ss.execute();
 		}

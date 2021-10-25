@@ -22,17 +22,6 @@ class Cond {
 		}
 	}
 	
-	void semantic() {
-		if (cmpr == null) {
-			cond.semantic();
-		} else {
-			cmpr.semantic();
-			if (cond != null) {
-				cond.semantic();
-			}
-		}
-	}
-	
 	void print() {
 		if (cmpr == null) {
 			System.out.print("!(");
@@ -46,16 +35,17 @@ class Cond {
 			}
 		}
 	}
-
-    public boolean execute(MemoryType memType) {
-        if (cmpr == null) {
-			return !cond.execute(memType);
+	
+	boolean execute() {
+		boolean result = false;
+		if (cmpr == null) {
+			result = !cond.execute();
 		} else {
-			boolean comparison = cmpr.execute(memType);
+			result = cmpr.execute();
 			if (cond != null) {
-				comparison = comparison || cond.execute(memType);
+				result = result || cond.execute();
 			}
-			return comparison;
 		}
-    }
+		return result;
+	}
 }

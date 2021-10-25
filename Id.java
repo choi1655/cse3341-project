@@ -7,33 +7,42 @@ class Id {
 		Parser.scanner.nextToken();
 	}
 	
-	// Called to check if the identifier has been declared
-	void semantic() {
-		if (Parser.nestedScopeCheck(identifier)==Core.ERROR) {
-			System.out.println("ERROR: No matching declaration found: " + identifier);
-			System.exit(0);
-		}
-	}
-	
-	//Called by IdList semantic functions to check for doubly declared variables
-	void doublyDeclared() {
-		if (Parser.currentScopeCheck(identifier)!=Core.ERROR) {
-			System.out.println("ERROR: Doubly declared variable detected: " + identifier);
-			System.exit(0);
-		}
-	}
-	
-	//Called by IdList semantic functions to add the variable to the scopes data structure in Parser
-	void addToScopes(Core type) {
-		Parser.scopes.peek().put(identifier, type);
-	}
-	
-	//Called by Assign semantic function to check the declared type of the variable
-	Core checkType() {
-		return Parser.nestedScopeCheck(identifier);
-	}
-	
 	void print() {
 		System.out.print(identifier);
+	}
+	
+	// Returns the string value of the Id
+	String getString() {
+		return identifier;
+	}
+	
+	// Finds the stored value of the variable
+	Integer getValue() {
+		return Executor.getValue(identifier);
+	}
+	
+	// Stores the passed value to the variable, used to handle regular assign
+	void storeValue(int value) {
+		Executor.storeValue(identifier, value);
+	}
+	
+	// Called by assign to handle "ref"-assign
+	void referenceCopy(Id copyFrom) {
+		Executor.referenceCopy(identifier, copyFrom.getString());
+	}
+	
+	// Called by assign to handle "new"-assign
+	void heapAllocate() {
+		Executor.heapAllocate(identifier);
+	}
+	
+	// Called when declaring an int variable
+	void executeIntAllocate() {
+		Executor.allocate(identifier, Core.INT);
+	}
+	
+	// Called when declaring a ref variable
+	void executeRefAllocate() {
+		Executor.allocate(identifier, Core.REF);
 	}
 }

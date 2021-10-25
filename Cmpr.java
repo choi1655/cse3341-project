@@ -1,7 +1,7 @@
 class Cmpr {
 	Expr expr1;
 	Expr expr2;
-	int option; // 0 if equal, 1 if <, 2 if <=
+	int option;
 	
 	void parse() {
 		expr1 = new Expr();
@@ -21,11 +21,6 @@ class Cmpr {
 		expr2.parse();
 	}
 	
-	void semantic() {
-		expr1.semantic();
-		expr2.semantic();
-	}
-	
 	void print() {
 		expr1.print();
 		switch(option) {
@@ -41,22 +36,22 @@ class Cmpr {
 		}
 		expr2.print();
 	}
-
-    public boolean execute(MemoryType memType) {
-		int result1 = expr1.execute(memType);
-		int result2 = expr2.execute(memType);
+	
+	boolean execute() {
 		boolean result = false;
-		switch (option) {
+		int lhs = expr1.execute();
+		int rhs = expr2.execute();
+		switch(option) {
 			case 0:
-				result = result1 == result2;
+				result = lhs == rhs;
 				break;
 			case 1:
-				result = result1 < result2;
+				result = lhs < rhs;
 				break;
 			case 2:
-				result = result1 <= result2;
+				result = lhs <= rhs;
 				break;
 		}
-        return result;
-    }
+		return result;
+	}
 }

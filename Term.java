@@ -12,13 +12,6 @@ class Term {
 		}				
 	}
 	
-	void semantic() {
-		factor.semantic();
-		if (term != null) {
-			term.semantic();
-		}
-	}
-	
 	void print() {
 		factor.print();
 		if (term != null) {
@@ -26,12 +19,12 @@ class Term {
 			term.print();
 		}
 	}
-
-	public int execute(MemoryType memType) {
-		int factorValue = factor.execute(memType);
+	
+	int execute() {
+		int result = factor.execute();
 		if (term != null) {
-			factorValue *= term.execute(memType);
+			result = result * term.execute();
 		}
-		return factorValue;
+		return result;
 	}
 }

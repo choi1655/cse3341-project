@@ -7,7 +7,7 @@ class If implements Stmt {
 	
 	public void parse() {
 		Parser.scanner.nextToken();
-		cond = new Cond();
+		cond = new Cond();;
 		cond.parse();
 		Parser.expectedToken(Core.THEN);
 		Parser.scanner.nextToken();
@@ -22,21 +22,9 @@ class If implements Stmt {
 		Parser.scanner.nextToken();
 	}
 	
-	public void semantic() {
-		cond.semantic();
-		Parser.scopes.push(new HashMap<String, Core>());
-		ss1.semantic();
-		Parser.scopes.pop();
-		if (ss2 != null) {
-			Parser.scopes.push(new HashMap<String, Core>());
-			ss2.semantic();
-			Parser.scopes.pop();
-		}
-	}
-	
 	public void print(int indent) {
 		for (int i=0; i<indent; i++) {
-			System.out.print("  ");
+			System.out.print("\t");
 		}
 		System.out.print("if ");
 		cond.print();
@@ -50,23 +38,19 @@ class If implements Stmt {
 			ss2.print(indent+1);
 		}
 		for (int i=0; i<indent; i++) {
-			System.out.print("  ");
+			System.out.print("\t");
 		}
 		System.out.println("endif");
 	}
-
-	@Override
-	public void execute(MemoryType memType) {
-		boolean condition = cond.execute(memType);
+	
+	public void execute() {
+		boolean condition = cond.execute();
+		Executor.pushLocalScope();
 		if (condition) {
-			Memory.instance().incrementScope();
 			ss1.execute();
-			Memory.instance().decrementScope();
-		}
-		if (!condition && ss2 != null) {
-			Memory.instance().incrementScope();
+		} else if (ss2 != null) {
 			ss2.execute();
-			Memory.instance().decrementScope();
 		}
+		Executor.popLocalScope();
 	}
 }

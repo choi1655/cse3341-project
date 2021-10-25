@@ -9,10 +9,6 @@ class Output implements Stmt {
 		Parser.scanner.nextToken();
 	}
 	
-	public void semantic() {
-		expr.semantic();
-	}
-	
 	public void print(int indent) {
 		for (int i=0; i<indent; i++) {
 			System.out.print("\t");
@@ -21,11 +17,8 @@ class Output implements Stmt {
 		expr.print();
 		System.out.println(";");
 	}
-
-	@Override
-	public void execute(MemoryType memType) {
-		// get the result from expr
-		int exprResult = expr.execute(memType);
-		System.out.println(exprResult);
+	
+	public void execute() {
+		System.out.println(expr.execute());
 	}
 }

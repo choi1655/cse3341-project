@@ -11,24 +11,17 @@ class DeclSeq {
 		}
 	}
 	
-	void semantic() {
-		decl.semantic();
-		if (ds != null) {
-			ds.semantic();
-		}
-	}
-	
 	void print(int indent) {
 		decl.print(indent);
 		if (ds != null) {
 			ds.print(indent);
 		}
 	}
-
-    public void execute() {
-		decl.execute(MemoryType.STATIC); // global section at this point so static memory
+	
+	void execute() {
+		decl.execute();
 		if (ds != null) {
 			ds.execute();
 		}
-    }
+	}
 }

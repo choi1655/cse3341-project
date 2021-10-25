@@ -12,14 +12,6 @@ class Decl implements Stmt {
 		}
 	}
 	
-	public void semantic() {
-		if (declInt != null) {
-			declInt.semantic();
-		} else {
-			declClass.semantic();
-		}
-	}
-	
 	public void print(int indent) {
 		if (declInt != null) {
 			declInt.print(indent);
@@ -27,12 +19,12 @@ class Decl implements Stmt {
 			declClass.print(indent);
 		}
 	}
-
-    public void execute(MemoryType memType) {
+	
+	public void execute() {
 		if (declInt != null) {
-			declInt.execute(memType);
+			declInt.execute();
 		} else {
-			declClass.execute(memType);
+			declClass.execute();
 		}
-    }
+	}
 }
