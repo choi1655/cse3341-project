@@ -26,7 +26,14 @@ public class FuncCall implements Stmt {
 
     @Override
     public void print(int indent) {
-        // TODO: implement
+        for (int i = 0; i < indent; i++) {
+            System.out.print("\t");
+        }
+        System.out.print("begin ");
+        id.print();
+        System.out.print(" (");
+        formals.print();
+        System.out.print(");");
     }
 
     @Override

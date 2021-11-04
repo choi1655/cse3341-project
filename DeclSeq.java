@@ -23,16 +23,22 @@ class DeclSeq {
 	}
 	
 	void print(int indent) {
-		// TODO: decide between FuncDecl and Decl
-		decl.print(indent);
+		if (decl == null) { // if decl is null must be FuncDecl
+			fd.print(indent);
+		} else {
+			decl.print(indent);
+		}
 		if (ds != null) {
 			ds.print(indent);
 		}
 	}
 	
 	void execute() {
-		// TODO: decide between FuncDecl and Decl
-		decl.execute();
+		if (decl == null) { // if decl is null must be FuncDecl
+			fd.execute();
+		} else {
+			decl.execute();
+		}
 		if (ds != null) {
 			ds.execute();
 		}

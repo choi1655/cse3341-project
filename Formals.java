@@ -16,7 +16,11 @@ public class Formals {
     }
     
     public void print() {
-        // TODO: implement
+        id.print();
+        if (formals != null) {
+            System.out.print(", ");
+            formals.print();
+        }
     }
 
     public void execute() {

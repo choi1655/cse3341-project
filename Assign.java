@@ -35,7 +35,7 @@ class Assign implements Stmt {
 		if (type == 1) {
 			System.out.print("new");
 		} else if (type == 2) {
-			System.out.print("class ");
+			System.out.print("ref ");
 			assignFrom.print();
 		} else {
 			expr.print();

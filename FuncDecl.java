@@ -29,8 +29,13 @@ public class FuncDecl {
         Parser.scanner.nextToken();
     }
 
-    void print() {
-        // TODO: Implement
+    void print(int indent) {
+        id.print();
+        System.out.print(" (ref ");
+        formals.print();
+        System.out.print(") begin");
+        ss.print(indent);
+        System.out.print(" endfunc");
     }
 
     void execute() {
