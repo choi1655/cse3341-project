@@ -1,3 +1,4 @@
+import java.util.*;
 
 class Parser {
 	//scanner is stored here as a static field so it is avaiable to the parse method
