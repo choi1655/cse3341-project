@@ -23,6 +23,7 @@ class DeclSeq {
 	}
 	
 	void print(int indent) {
+		// TODO: decide between FuncDecl and Decl
 		decl.print(indent);
 		if (ds != null) {
 			ds.print(indent);
@@ -30,6 +31,7 @@ class DeclSeq {
 	}
 	
 	void execute() {
+		// TODO: decide between FuncDecl and Decl
 		decl.execute();
 		if (ds != null) {
 			ds.execute();
