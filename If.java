@@ -1,4 +1,3 @@
-import java.util.*;
 
 class If implements Stmt {
 	Cond cond;
