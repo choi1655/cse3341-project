@@ -45,4 +45,8 @@ class Id {
 	void executeRefAllocate() {
 		Executor.allocate(identifier, Core.REF);
 	}
+
+	void storeFunction(FuncDecl fd) {
+		
+	}
 }

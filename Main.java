@@ -8,7 +8,7 @@ class Main {
 		
 		prog.parse();
 		
-		//prog.print();
+		// prog.print();
 		
 		prog.execute(args[1]);
 	}

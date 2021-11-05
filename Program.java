@@ -31,11 +31,13 @@ class Program {
 	
 	void execute(String dataFileName) {
 		Executor.initialize(dataFileName);
-		if (ds != null) {
-			ds.execute();
-		}
+		Executor.pushCallStack();
 		Executor.pushLocalScope();
-		ss.execute();
+		if (ds != null) {
+			ds.execute(); // global
+		}
+		ss.execute(); // local
 		Executor.popLocalScope();
+		Executor.popCallStack();
 	}
 }

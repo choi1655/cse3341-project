@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class FuncCall implements Stmt {
 
@@ -37,7 +38,11 @@ public class FuncCall implements Stmt {
     }
 
     @Override
-    public void execute() {
+    public void execute() { // a, b, c -- x, y, z
         // TODO: implement
+        FuncDecl fd = Executor.functions.get(id.identifier);
+        fd.copyReference(formals); // fd.formals = x thisformal = r
+        fd.executeFunction();
+        
     }
 }

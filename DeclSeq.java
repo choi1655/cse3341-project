@@ -8,17 +8,13 @@ class DeclSeq {
 		if (Parser.scanner.currentToken() == Core.ID) {
 			fd = new FuncDecl();
 			fd.parse();
-			if (Parser.scanner.currentToken() != Core.BEGIN) {
-				ds = new DeclSeq();
-				ds.parse();
-			}
 		} else {
 			decl = new Decl();
 			decl.parse();
-			if (Parser.scanner.currentToken() != Core.BEGIN) {
-				ds = new DeclSeq();
-				ds.parse();
-			}
+		}
+		if (Parser.scanner.currentToken() != Core.BEGIN) {
+			ds = new DeclSeq();
+			ds.parse();
 		}
 	}
 	
@@ -35,7 +31,7 @@ class DeclSeq {
 	
 	void execute() {
 		if (decl == null) { // if decl is null must be FuncDecl
-			fd.execute();
+			fd.declareFunction();
 		} else {
 			decl.execute();
 		}

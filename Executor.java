@@ -17,24 +17,44 @@ class CoreVar {
 class Executor {
 	
 	static HashMap<String, CoreVar> globalSpace;
-	static Stack<HashMap<String, CoreVar>> stackSpace;
+	static Stack<Stack<HashMap<String, CoreVar>>> stackSpace;
 	static ArrayList<Integer> heapSpace;
+
+	static Map<String, FuncDecl> functions;
+
+	// A(ref r)
+	// B(ref x)
+
+	// function: [A, FuncDecl(A)], [B, FuncDecl(B)]
+	// id = A
+	// functions.get(A).execute()
+
+	// stackSpace: r refers to X
 	
 	static Scanner dataFile;
 	
 	static void initialize(String dataFileName) {
 		globalSpace = new HashMap<String, CoreVar>();
-		stackSpace = new Stack<HashMap<String, CoreVar>>();
+		stackSpace = new Stack<Stack<HashMap<String, CoreVar>>>();
 		heapSpace = new ArrayList<Integer>();
 		dataFile = new Scanner(dataFileName);
+		functions = new HashMap<>();
+	}
+
+	static void pushCallStack() {
+		stackSpace.push(new Stack<HashMap<String, CoreVar>>());
+	}
+
+	static void popCallStack() {
+		stackSpace.pop();
 	}
 	
 	static void pushLocalScope() {
-		stackSpace.push(new HashMap<String, CoreVar>());
+		stackSpace.peek().push(new HashMap<String, CoreVar>());
 	}
 	
 	static void popLocalScope() {
-		stackSpace.pop();
+		stackSpace.peek().pop();
 	}
 	
 	// Handles geting values for input statements
@@ -54,19 +74,19 @@ class Executor {
 	static void allocate(String identifier, Core varType) {
 		CoreVar record = new CoreVar(varType);
 		// If we are in the DeclSeq, the local scope will not be created yet
-		if (stackSpace.size()==0) {
+		if (stackSpace.peek().peek().size()==0) {
 			globalSpace.put(identifier, record);
 		} else {
-			stackSpace.peek().put(identifier, record);
+			stackSpace.peek().peek().put(identifier, record);
 		}
 	}
 	
 	// Finds out where a variable is stored
 	static CoreVar getStackOrStatic(String identifier) {
 		CoreVar record = null;
-		for (int i=stackSpace.size() - 1; i>=0; i--) {
-			if (stackSpace.get(i).containsKey(identifier)) {
-				record = stackSpace.get(i).get(identifier);
+		for (int i=stackSpace.peek().size() - 1; i>=0; i--) {
+			if (stackSpace.peek().get(i).containsKey(identifier)) {
+				record = stackSpace.peek().get(i).get(identifier);
 				break;
 			}
 		}
@@ -123,11 +143,22 @@ class Executor {
 		}
 	}
 	
+	// declaring: A(ref a, b, c);
+    // calling:   A(x, y, z)
+    // have a point to x, b point to y, c point to z
+	// var1 : a, var2: x
+	// var1: b, var2: y
 	// Handles "ref"-type assignments
 	static void referenceCopy(String var1, String var2) {
 		CoreVar x = getStackOrStatic(var1);
 		CoreVar y = getStackOrStatic(var2);
-		x.value = y.value;
+		if (x == null) {
+			x = y;
+			// add x to the stack
+			stackSpace.peek().peek().put(var1, x);
+		} else {
+			x.value = y.value;
+		}
 	}
 
 }

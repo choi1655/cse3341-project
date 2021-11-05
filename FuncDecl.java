@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class FuncDecl {
     Id id;
@@ -38,7 +39,33 @@ public class FuncDecl {
         System.out.print(" endfunc");
     }
 
-    void execute() {
+    void declareFunction() {
+        // add this FuncDecl to functions map
         // TODO: Implement
+        Executor.functions.put(id.identifier, this);
+    }
+
+    // A(ref a, b, c); // declare
+    // A(x, y, z); // execute
+    void executeFunction() {
+        // TODO: implement
+        // when this is called, this will actually run
+        // have the newFormals point to this.formals
+        // we go through the memory, find a, b, c,
+        // have them repoint to x, y, z (this.formals)
+        // /when function is called, we need to create a new
+        // local scope
+
+        /**
+         * 
+         */
+        // 
+        ss.execute();
+    }
+
+    public void copyReference(Formals formals2) {
+        formals.copyReference(formals2);
+
+
     }
 }
