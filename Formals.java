@@ -36,7 +36,7 @@ public class Formals {
     public void copyReference(Formals formals2) {
         id.referenceCopy(formals2.id);
         if (formals != null) {
-            formals.copyReference(formals2);
+            formals.copyReference(formals2.formals);
         }
         // formals2.id.referenceCopy(id);
         // if (formals2.formals != null) {
