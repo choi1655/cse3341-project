@@ -1,7 +1,10 @@
 program
 	ref x;
 	ref y;
-	A(ref r, s) begin x=0; y=0; endfunc
+	A(ref r, s) begin 
+		x=0; 
+		y=0; 
+	endfunc
 begin
 	x=new;
 	y=new;

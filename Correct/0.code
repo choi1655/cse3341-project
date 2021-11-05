@@ -1,5 +1,10 @@
 program
-	A(ref r) begin if r<9 then input r; begin A(r); endif endfunc
+	A(ref r) begin 
+		if r<9 then 
+			input r; 
+			begin A(r); 
+		endif 
+	endfunc
 	ref x;
 begin
 	x = new;
