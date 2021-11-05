@@ -41,6 +41,10 @@ public class FuncCall implements Stmt {
     public void execute() { // a, b, c -- x, y, z
         // TODO: implement
         FuncDecl fd = Executor.functions.get(id.identifier);
+        if (fd == null) {
+            System.out.println("ERROR: Function " + id.identifier + " does not exist");
+            System.exit(0);
+        }
         fd.copyReference(formals); // fd.formals = x thisformal = r
         fd.executeFunction();
         
