@@ -45,6 +45,8 @@ public class FuncCall implements Stmt {
             System.out.println("ERROR: Function " + id.identifier + " does not exist");
             System.exit(0);
         }
+        // copy the values in the top most element in stack to the new stack before pushing
+        // 
         fd.copyReference(formals); // fd.formals = x thisformal = r
         fd.executeFunction();
         

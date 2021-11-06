@@ -31,7 +31,7 @@ class Program {
 	
 	void execute(String dataFileName) {
 		Executor.initialize(dataFileName);
-		Executor.pushCallStack();
+		// Executor.pushCallStack();
 		Executor.pushLocalScope();
 		if (ds != null) {
 			ds.execute(); // global

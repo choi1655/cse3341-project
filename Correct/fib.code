@@ -1,0 +1,26 @@
+program
+    fib(ref x, ret) begin
+        if x <= 1 then
+            ret = x;
+        else
+            ref x1, ret1, x2, ret2;
+            x1 = new; ret1 = new; x2 = new; ret2 = new;
+            x1 = x - 1; x2 = x - 2;
+            begin fib(x1, ret1);
+            begin fib(x2, ret2);
+            ret = ret1 + ret2;
+        endif
+    endfunc
+begin
+    int len, i;
+    input len;
+    i = 0;
+    while i < len begin
+        ref x, ret;
+        x = new; ret = new;
+        x = i;
+        begin fib(x, ret);
+        output ret;
+        i = i + 1;
+    endwhile
+end

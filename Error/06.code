@@ -1,0 +1,66 @@
+program
+	divideByTwo(ref num) begin
+		if 1<num then
+			ref num1;
+			num1=new;
+			num1=num-2;
+			begin divideByTwo(num1);
+			num=1+num1;
+    	else
+			num=0;
+		endif
+	endfunc
+	power(ref num, exp) begin
+		if 0<exp then
+			ref num1, exp1;
+			num1=new; exp1=new;
+			num1=num; exp1=exp-1;
+			begin power(num1, exp1);
+			num=num*num1;
+		else
+			num=1;
+		endif
+	endfunc
+	root(ref l, h, x, exp, ret) begin
+		int low, high, mid;
+		low=l;
+		high=h+1;
+		if 1<high-low then
+			ref divide;
+			divide=new;
+			divide=high-low;
+			begin divideByTwo(divide);
+			mid=divide+low;
+			ref pow, exp1;
+			pow=new; exp1=new;
+			pow=mid; exp1=exp;
+			begin power(pow, exp1);
+			ref bound, mid1;
+			bound=new; mid1=new;
+			mid1=mid;
+			if x<pow then
+				bound=low;
+				mid1=mid1-1;
+				begin root(bound, mid1, x, exp, ret);
+			else
+				bound=high;
+				begin root(mid1, bound, x, exp, ret);
+			endif
+		else
+			ret=low;
+		endif
+	endfunc
+begin
+	int num1, num2;
+	input num1; input num2;
+	ref x, exp, ret;
+	x=new; exp=new; ret=new;
+	x=num1; exp=num2;
+	if 0<x then
+		ref l, h;
+		l=new; h=new;
+		l=0; h=x;
+		begin root(l, h, x, exp, ret);
+	endif
+	output ret;
+end

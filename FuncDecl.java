@@ -41,8 +41,12 @@ public class FuncDecl {
 
     void declareFunction() {
         // add this FuncDecl to functions map
-        // TODO: Implement
-        Executor.functions.put(id.identifier, this);
+        if (!Executor.functions.containsKey(id.identifier)) {
+            Executor.functions.put(id.identifier, this);
+        } else {
+            System.out.println("ERROR: Function " + id.identifier + " already exists!");
+            System.exit(0);
+        }
     }
 
     // A(ref a, b, c); // declare
@@ -60,7 +64,11 @@ public class FuncDecl {
          * 
          */
         // 
+        Executor.pushCallStack(formals);
+        // Executor.pushLocalScope();
         ss.execute();
+        Executor.popLocalScope();
+        Executor.popCallStack();
     }
 
     public void copyReference(Formals formals2) {
