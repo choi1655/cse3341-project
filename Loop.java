@@ -1,4 +1,3 @@
-import java.util.*;
 
 class Loop implements Stmt {
 	Cond cond;
@@ -16,13 +15,6 @@ class Loop implements Stmt {
 		Parser.scanner.nextToken();
 	}
 	
-	public void semantic() {
-		cond.semantic();
-		Parser.scopes.push(new HashMap<String, Core>());
-		ss.semantic();
-		Parser.scopes.pop();
-	}
-	
 	public void print(int indent) {
 		for (int i=0; i<indent; i++) {
 			System.out.print("\t");
@@ -36,15 +28,13 @@ class Loop implements Stmt {
 		}
 		System.out.println("endwhile");
 	}
-
-	@Override
-	public void execute(MemoryType memType) {
-		boolean condition = cond.execute(memType);
-		while (condition) {
-			Memory.instance().incrementScope();
+	
+	public void execute() {
+		while (cond.execute()) {
+			Executor.pushLocalScope();
 			ss.execute();
-			Memory.instance().decrementScope();
-			condition = cond.execute(memType);
+			Executor.popLocalScope();
 		}
+		
 	}
 }

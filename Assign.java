@@ -1,13 +1,8 @@
 class Assign implements Stmt {
-	// type is 1 if "new" assignment, 2 if "ref" assignment, 3 if "<expr>" assignment
 	int type;
-	// assignTo is the id on the LHS of assignment
 	Id assignTo;
-	// assignFrom is the id on RHS of "ref" assignment
 	Id assignFrom;
 	Expr expr;
-
-	private Memory memory = Memory.instance();
 	
 	public void parse() {
 		assignTo = new Id();
@@ -31,27 +26,6 @@ class Assign implements Stmt {
 		Parser.scanner.nextToken();
 	}
 	
-	public void semantic() {
-		assignTo.semantic();
-		if (type == 1) {
-			if (assignTo.checkType() != Core.REF) {
-				System.out.println("ERROR: int variable used in new assignment");
-				System.exit(0);
-			}
-		} else if (type == 2) {
-			if (assignTo.checkType() != Core.REF) {
-				System.out.println("ERROR: int variable used in ref assignment");
-				System.exit(0);
-			}
-			if (assignFrom.checkType() != Core.REF) {
-				System.out.println("ERROR: int variable used in ref assignment");
-				System.exit(0);
-			}
-		} else {
-			expr.semantic();
-		}
-	}
-	
 	public void print(int indent) {
 		for (int i=0; i<indent; i++) {
 			System.out.print("\t");
@@ -68,24 +42,20 @@ class Assign implements Stmt {
 		}
 		System.out.println(";");
 	}
-
-	@Override
-	public void execute(MemoryType memType) {
+	
+	public void execute() {
 		if (type == 1) {
-			// id = new;
-			memory.declareNewRef(assignTo.identifier, memType);
+			// Doing a "new"-assign
+			assignTo.heapAllocate();
 		} else if (type == 2) {
-			// id = ref id;
-			// find id in local and global. Make the index point to 
-			memory.reassignRef(assignTo.identifier, assignFrom.identifier);
+			// Doing a "ref"-assign
+			assignTo.referenceCopy(assignFrom);
 		} else {
-			// id = <expr>;
-			int result = expr.execute(memType);
-			if (memory.containsVariable(assignTo.identifier, memType)) {
-				memory.reassignInt(assignTo.identifier, result, memory.isRef(assignTo.identifier));
-			} else {
-				memory.declareNewInt(assignTo.identifier, result, memType);
-			}
+			// Doing a regular assign
+			assignTo.storeValue(expr.execute());
 		}
 	}
 }
+
+
+

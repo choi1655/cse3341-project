@@ -1,7 +1,7 @@
 class Expr {
 	Term term;
 	Expr expr;
-	int option; // 0 if just a term, 1 if addition, 2 if subtraction
+	int option;
 	
 	void parse() {
 		term  = new Term();
@@ -18,13 +18,6 @@ class Expr {
 		}						
 	}
 	
-	void semantic() {
-		term.semantic();
-		if (expr != null) {
-			expr.semantic();
-		}
-	}
-	
 	void print() {
 		term.print();
 		if (option == 1) {
@@ -35,14 +28,14 @@ class Expr {
 			expr.print();
 		}
 	}
-
-	public int execute(MemoryType memType) {
-		int value = term.execute(memType);
+	
+	int execute() {
+		int result = term.execute();
 		if (option == 1) {
-			value += expr.execute(memType);
+			result += expr.execute();
 		} else if (option == 2) {
-			value -= expr.execute(memType);
+			result -= expr.execute();
 		}
-		return value;
+		return result;
 	}
 }

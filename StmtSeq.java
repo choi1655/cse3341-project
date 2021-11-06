@@ -15,6 +15,8 @@ class StmtSeq {
 			stmt = new Loop();
 		}  else if (Parser.scanner.currentToken() == Core.INT || Parser.scanner.currentToken() == Core.REF) {
 			stmt = new Decl();
+		} else if (Parser.scanner.currentToken() == Core.BEGIN) {
+			stmt = new FuncCall();
 		} else {
 			System.out.println("ERROR: Bad start to statement: " + Parser.scanner.currentToken());
 			System.exit(0);
@@ -23,16 +25,10 @@ class StmtSeq {
 		if ((Parser.scanner.currentToken() != Core.END) 
 			&& (Parser.scanner.currentToken() != Core.ENDIF)
 			&& (Parser.scanner.currentToken() != Core.ENDWHILE)
-			&& (Parser.scanner.currentToken() != Core.ELSE)) {
+			&& (Parser.scanner.currentToken() != Core.ELSE)
+			&& (Parser.scanner.currentToken() != Core.ENDFUNC)) {
 			ss = new StmtSeq();
 			ss.parse();
-		}
-	}
-	
-	void semantic() {
-		stmt.semantic();
-		if (ss != null) {
-			ss.semantic();
 		}
 	}
 			
@@ -42,9 +38,9 @@ class StmtSeq {
 			ss.print(indent);
 		}
 	}
-
-	public void execute() {
-		stmt.execute(MemoryType.STACK); // local section at this point so stack memory
+	
+	void execute() {
+		stmt.execute();
 		if (ss != null) {
 			ss.execute();
 		}

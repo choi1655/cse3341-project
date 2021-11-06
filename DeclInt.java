@@ -1,20 +1,16 @@
 class DeclInt {
-	IDList list;
+	IdList list;
 	
-	public void parse() {
+	void parse() {
 		Parser.expectedToken(Core.INT);
 		Parser.scanner.nextToken();
-		list = new IDList();
+		list = new IdList();
 		list.parse();
 		Parser.expectedToken(Core.SEMICOLON);
 		Parser.scanner.nextToken();
 	}
 	
-	public void semantic() {
-		list.semanticIntVars();
-	}
-	
-	public void print(int indent) {
+	void print(int indent) {
 		for (int i=0; i<indent; i++) {
 			System.out.print("\t");
 		}
@@ -22,8 +18,9 @@ class DeclInt {
 		list.print();
 		System.out.println(";");
 	}
-
-    public void execute(MemoryType memType) {
-		list.executeInt(memType);
-    }
+	
+	void execute() {
+		// Id list has two execute fucntions, call the one for int variables
+		list.executeIntIdList();
+	}		
 }

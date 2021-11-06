@@ -1,20 +1,16 @@
 class DeclClass {
-	IDList list;
+	IdList list;
 	
-	public void parse() {
+	void parse() {
 		Parser.expectedToken(Core.REF);
 		Parser.scanner.nextToken();
-		list = new IDList();
+		list = new IdList();
 		list.parse();
 		Parser.expectedToken(Core.SEMICOLON);
 		Parser.scanner.nextToken();
 	}
 	
-	public void semantic() {
-		list.semanticRefVars();
-	}
-	
-	public void print(int indent) {
+	void print(int indent) {
 		for (int i=0; i<indent; i++) {
 			System.out.print("\t");
 		}
@@ -22,8 +18,9 @@ class DeclClass {
 		list.print();
 		System.out.println(";");
 	}
-
-    public void execute(MemoryType memType) {
-		list.executeRef(memType);
-    }
+	
+	void execute() {
+		// Id list has two execute fucntions, call the one for ref variables
+		list.executeRefIdList();
+	}		
 }

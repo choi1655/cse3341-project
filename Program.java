@@ -1,4 +1,3 @@
-import java.util.*;
 
 class Program {
 	DeclSeq ds;
@@ -20,17 +19,6 @@ class Program {
 		Parser.expectedToken(Core.EOF);
 	}
 	
-	void semantic() {
-		Parser.scopes = new Stack<HashMap<String, Core>>();
-		Parser.scopes.push(new HashMap<String, Core>());
-		if (ds != null) {
-			ds.semantic();
-		}
-		Parser.scopes.push(new HashMap<String, Core>());
-		ss.semantic();
-		Parser.scopes.pop();
-	}
-	
 	void print() {
 		System.out.println("program");
 		if (ds != null) {
@@ -40,11 +28,16 @@ class Program {
 		ss.print(1);
 		System.out.println("end");
 	}
-
-	void execute() {
+	
+	void execute(String dataFileName) {
+		Executor.initialize(dataFileName);
+		// Executor.pushCallStack();
+		Executor.pushLocalScope();
 		if (ds != null) {
-			ds.execute();
+			ds.execute(); // global
 		}
-		ss.execute();
+		ss.execute(); // local
+		Executor.popLocalScope();
+		Executor.popCallStack();
 	}
 }

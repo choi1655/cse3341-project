@@ -3,8 +3,6 @@ class Factor {
 	int constant;
 	Expr expr;
 	
-	private Memory memory = Memory.instance();
-
 	void parse() {
 		if (Parser.scanner.currentToken() == Core.ID) {
 			id = new Id();
@@ -19,16 +17,8 @@ class Factor {
 			Parser.expectedToken(Core.RPAREN);
 			Parser.scanner.nextToken();
 		} else {
-			System.out.println("ERROR: Expected ID, CONST, or LPAREN, received " + Parser.scanner.currentToken());
+			System.out.println("ERROR: Expected ID, CONST, or LPAREN, recieved " + Parser.scanner.currentToken());
 			System.exit(0);
-		}
-	}
-	
-	void semantic() {
-		if (id != null) {
-			id.semantic();
-		} else if (expr != null) {
-			expr.semantic();
 		}
 	}
 	
@@ -43,16 +33,19 @@ class Factor {
 			System.out.print(constant);
 		}
 	}
-
-	public int execute(MemoryType memType) {
-		int value = 0;
+	
+	int execute() {
+		int result = constant;
 		if (id != null) {
-			value = memory.getVariableValue(id.identifier);
+			try {
+				result = (int) id.getValue();
+			} catch (Exception e) {
+				System.out.println("ERROR: " + id.getString() + "is null");
+				System.exit(0);
+			}
 		} else if (expr != null) {
-			value = expr.execute(memType);
-		} else {
-			value = constant;
+			result = expr.execute();
 		}
-		return value;
+		return result;
 	}
 }

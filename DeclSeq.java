@@ -1,34 +1,42 @@
 class DeclSeq {
 	Decl decl;
 	DeclSeq ds;
+	FuncDecl fd;
 	
 	void parse() {
-		decl = new Decl();
-		decl.parse();
+		// decide if we have funcdecl by checking Core.ID
+		if (Parser.scanner.currentToken() == Core.ID) {
+			fd = new FuncDecl();
+			fd.parse();
+		} else {
+			decl = new Decl();
+			decl.parse();
+		}
 		if (Parser.scanner.currentToken() != Core.BEGIN) {
 			ds = new DeclSeq();
 			ds.parse();
 		}
 	}
 	
-	void semantic() {
-		decl.semantic();
-		if (ds != null) {
-			ds.semantic();
-		}
-	}
-	
 	void print(int indent) {
-		decl.print(indent);
+		if (decl == null) { // if decl is null must be FuncDecl
+			fd.print(indent);
+		} else {
+			decl.print(indent);
+		}
 		if (ds != null) {
 			ds.print(indent);
 		}
 	}
-
-    public void execute() {
-		decl.execute(MemoryType.STATIC); // global section at this point so static memory
+	
+	void execute() {
+		if (decl == null) { // if decl is null must be FuncDecl
+			fd.declareFunction();
+		} else {
+			decl.execute();
+		}
 		if (ds != null) {
 			ds.execute();
 		}
-    }
+	}
 }
