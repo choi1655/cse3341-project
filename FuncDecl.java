@@ -1,4 +1,3 @@
-import java.util.List;
 
 public class FuncDecl {
     Id id;
@@ -52,18 +51,12 @@ public class FuncDecl {
     // A(ref a, b, c); // declare
     // A(x, y, z); // execute
     void executeFunction() {
-        // TODO: implement
         // when this is called, this will actually run
         // have the newFormals point to this.formals
         // we go through the memory, find a, b, c,
         // have them repoint to x, y, z (this.formals)
         // /when function is called, we need to create a new
         // local scope
-
-        /**
-         * 
-         */
-        // 
         Executor.pushCallStack(formals);
         // Executor.pushLocalScope();
         ss.execute();
@@ -73,7 +66,5 @@ public class FuncDecl {
 
     public void copyReference(Formals formals2) {
         formals.copyReference(formals2);
-
-
     }
 }

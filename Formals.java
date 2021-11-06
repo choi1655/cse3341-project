@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 
 public class Formals {
 
@@ -25,12 +23,7 @@ public class Formals {
             formals.print();
         }
     }
-
-    public void execute() {
-        // TODO: implement
-        
-    }
-
+    
     // assuming formals2 has same number of ids as this formal
     // have this id and formals point to the passed formals
     public void copyReference(Formals formals2) {

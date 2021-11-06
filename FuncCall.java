@@ -1,4 +1,3 @@
-import java.util.List;
 
 public class FuncCall implements Stmt {
 
@@ -39,7 +38,6 @@ public class FuncCall implements Stmt {
 
     @Override
     public void execute() { // a, b, c -- x, y, z
-        // TODO: implement
         FuncDecl fd = Executor.functions.get(id.identifier);
         if (fd == null) {
             System.out.println("ERROR: Function " + id.identifier + " does not exist");

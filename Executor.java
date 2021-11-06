@@ -45,8 +45,6 @@ class Executor {
 
 	static void pushCallStack(Formals formals) { // r,s
 		HashMap<String, CoreVar> map = new HashMap<>();
-		// pushLocalScope();
-		// TODO: add the new formals to this map?
 		map.put(formals.id.identifier, getStackOrStatic(formals.id.identifier));
 		while (formals.formals != null) {
 			formals = formals.formals;
