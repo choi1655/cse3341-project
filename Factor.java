@@ -40,7 +40,7 @@ class Factor {
 			try {
 				result = (int) id.getValue();
 			} catch (Exception e) {
-				System.out.println("ERROR: " + id.getString() + "is null");
+				System.out.println("ERROR: " + id.getString() + " is null");
 				System.exit(0);
 			}
 		} else if (expr != null) {

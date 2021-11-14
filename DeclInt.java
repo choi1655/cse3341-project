@@ -20,7 +20,6 @@ class DeclInt {
 	}
 	
 	void execute() {
-		// Id list has two execute fucntions, call the one for int variables
 		list.executeIntIdList();
 	}		
 }

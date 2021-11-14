@@ -26,7 +26,7 @@ class Id {
 		Executor.storeValue(identifier, value);
 	}
 	
-	// Called by assign to handle "ref"-assign
+	// Called by assign to handle "class"-assign
 	void referenceCopy(Id copyFrom) {
 		Executor.referenceCopy(identifier, copyFrom.getString());
 	}
@@ -41,12 +41,8 @@ class Id {
 		Executor.allocate(identifier, Core.INT);
 	}
 	
-	// Called when declaring a ref variable
+	// Called when declaring a class variable
 	void executeRefAllocate() {
 		Executor.allocate(identifier, Core.REF);
-	}
-
-	void storeFunction(FuncDecl fd) {
-		
 	}
 }

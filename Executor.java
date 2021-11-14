@@ -17,45 +17,27 @@ class CoreVar {
 class Executor {
 	
 	static HashMap<String, CoreVar> globalSpace;
-	static Stack<Stack<HashMap<String, CoreVar>>> stackSpace;
 	static ArrayList<Integer> heapSpace;
-
-	static Map<String, FuncDecl> functions;
-
-	// A(ref r)
-	// B(ref x)
-
-	// function: [A, FuncDecl(A)], [B, FuncDecl(B)]
-	// id = A
-	// functions.get(A).execute()
-
-	// stackSpace: r refers to X
 	
 	static Scanner dataFile;
 	
+	// stackSpace is now our call stack
+	static Stack<Stack<HashMap<String, CoreVar>>> stackSpace;
+	
+	// This will store all FuncDecls so we can look up the function being called
+	static HashMap<String, FuncDecl> funcDefinitions;
+	
+	/*
+	Overriding some methods from the super class to handle the call stack
+	*/
+	
 	static void initialize(String dataFileName) {
 		globalSpace = new HashMap<String, CoreVar>();
-		stackSpace = new Stack<Stack<HashMap<String, CoreVar>>>();
 		heapSpace = new ArrayList<Integer>();
 		dataFile = new Scanner(dataFileName);
-		functions = new HashMap<>();
-
-		stackSpace.push(new Stack<HashMap<String, CoreVar>>());
-	}
-
-	static void pushCallStack(Formals formals) { // r,s
-		HashMap<String, CoreVar> map = new HashMap<>();
-		map.put(formals.id.identifier, getStackOrStatic(formals.id.identifier));
-		while (formals.formals != null) {
-			formals = formals.formals;
-			map.put(formals.id.identifier, getStackOrStatic(formals.id.identifier));
-		}
-		stackSpace.push(new Stack<HashMap<String, CoreVar>>());
-		stackSpace.peek().push(map);
-	}
-
-	static void popCallStack() {
-		stackSpace.pop();
+		
+		stackSpace = new Stack<Stack<HashMap<String, CoreVar>>>();
+		funcDefinitions = new HashMap<String, FuncDecl>();
 	}
 	
 	static void pushLocalScope() {
@@ -66,7 +48,6 @@ class Executor {
 		stackSpace.peek().pop();
 	}
 	
-	// Handles geting values for input statements
 	static int getNextData() {
 		int data = 0;
 		if (dataFile.currentToken() == Core.EOF) {
@@ -79,18 +60,16 @@ class Executor {
 		return data;
 	}
 	
-	// Handles variable declarations
 	static void allocate(String identifier, Core varType) {
 		CoreVar record = new CoreVar(varType);
-		// If we are in the DeclSeq, the local scope will not be created yet
-		if (stackSpace.peek().peek().size()==0) {
+		// If we are in the DeclSeq, no frames will have been created yet
+		if (stackSpace.size()==0) {
 			globalSpace.put(identifier, record);
 		} else {
 			stackSpace.peek().peek().put(identifier, record);
 		}
 	}
 	
-	// Finds out where a variable is stored
 	static CoreVar getStackOrStatic(String identifier) {
 		CoreVar record = null;
 		for (int i=stackSpace.peek().size() - 1; i>=0; i--) {
@@ -105,7 +84,6 @@ class Executor {
 		return record;
 	}
 	
-	// Handles "new" assignments
 	static void heapAllocate(String identifier) {
 		CoreVar x = getStackOrStatic(identifier);
 		if (x.type != Core.REF) {
@@ -116,13 +94,11 @@ class Executor {
 		heapSpace.add(null);
 	}
 	
-	// Returns the declared type of a variable
 	static Core getType(String identifier) {
 		CoreVar x = getStackOrStatic(identifier);
 		return x.type;
 	}
 	
-	// Gets the r-value of a variable
 	static Integer getValue(String identifier) {
 		CoreVar x = getStackOrStatic(identifier);
 		Integer value = x.value;
@@ -137,7 +113,6 @@ class Executor {
 		return value;
 	}
 	
-	// Used to store values to int and ref variables
 	static void storeValue(String identifier, int value) {
 		CoreVar x = getStackOrStatic(identifier);
 		if (x.type == Core.REF) {
@@ -152,22 +127,57 @@ class Executor {
 		}
 	}
 	
-	// declaring: A(ref a, b, c);
-    // calling:   A(x, y, z)
-    // have a point to x, b point to y, c point to z
-	// var1 : a, var2: x
-	// var1: b, var2: y
-	// Handles "ref"-type assignments
 	static void referenceCopy(String var1, String var2) {
 		CoreVar x = getStackOrStatic(var1);
 		CoreVar y = getStackOrStatic(var2);
-		if (x == null) {
-			x = y;
-			// add x to the stack
-			stackSpace.peek().peek().put(var1, x);
-		} else {
-			x.value = y.value;
+		x.value = y.value;
+	}
+	
+	/*
+	New methods to handle pushing/popping frames and storing function definitions
+	*/
+	
+	static void storeFuncDef(Id name, FuncDecl definition) {
+		funcDefinitions.put(name.getString(), definition);
+	}
+	
+	static Formals getFormalParams(Id name) {
+		if (!funcDefinitions.containsKey(name.getString())) {
+			System.out.println("ERROR: Function call " + name.getString() + " has no target!");
+			System.exit(0);
 		}
+		return funcDefinitions.get(name.getString()).getFormalParams();
+	}
+	
+	static StmtSeq getBody(Id name) {
+		return funcDefinitions.get(name.getString()).getBody();
+	}
+	
+	static void pushFrame() {
+		stackSpace.push(new Stack<HashMap<String, CoreVar>>());
+		pushLocalScope();
+	}
+	
+	static void pushFrame(Formals formalParams, Formals actualParams) {
+		List<String> formals = formalParams.execute();
+		List<String> actuals = actualParams.execute();
+		
+		Stack<HashMap<String, CoreVar>> newFrame = new Stack<HashMap<String, CoreVar>>();
+		newFrame.push(new HashMap<String, CoreVar>());
+		
+		for (int i=0; i<formals.size(); i++) {
+			CoreVar temp = new CoreVar(Core.REF);
+			temp.value = getStackOrStatic(actuals.get(i)).value;
+			//System.out.println(formals.get(i) + " " + actuals.get(i) + " passing:" + temp.value+ " heap:" + heapSpace.get(temp.value));
+			newFrame.peek().put(formals.get(i), temp);
+		}
+		
+		stackSpace.push(newFrame);
+		pushLocalScope();
+	}
+	
+	static void popFrame() {
+		stackSpace.pop();
 	}
 
 }
