@@ -16,6 +16,7 @@ class CoreVar {
 
 class Executor {
 	
+	static boolean assignHappened = false;
 	static HashMap<String, CoreVar> globalSpace;
 	static ArrayList<Integer> heapSpace;
 	
@@ -56,14 +57,16 @@ class Executor {
 	}
 
 	static void removeReferenceScope() {
-		referenceCounts.remove(referenceCounts.size() - 1);
-		System.out.printf("gc:%d\n", getNumOfReferences());
+		int removed = referenceCounts.remove(referenceCounts.size() - 1);
+		if (removed != getNumOfReferences())
+			System.out.printf("gc:%d\n", getNumOfReferences());
 	}
 
 	static void addReferenceCount() {
 		int num = getNumOfReferences();
 		referenceCounts.set(referenceCounts.size() - 1, num + 1);
 		System.out.printf("gc:%d\n", getNumOfReferences());
+		assignHappened = true;
 	}
 
 	static void removeReferenceCount() {
