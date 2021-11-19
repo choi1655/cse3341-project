@@ -11,12 +11,12 @@ Files:
 		DeclClass.java
 		DeclInt.java
 		DeclSeq.java
-		Executor.java - Modified in P4 - Handles the call stack
+		Executor.java - Modified in P5 - Handles the garbage collector reference counts
 		Expr.java
 		Factor.java
-		Formals.java - Added in P4 - Describes the function parameter
-		FuncCall.java - Added in P4 - Describes the function call
-		FuncDecl.java - Added in P4 - Describes the function declarations
+		Formals.java
+		FuncCall.java
+		FuncDecl.java
 		Id.java
 		IdList.java
 		If.java
@@ -31,23 +31,23 @@ Files:
 		StmtSeq.java
 		Term.java
 	
-	In this project, the support for the function is added. To handle the functions, a new support for the call stack was required.
-	This is implemented by modifying the stack of maps in Executor to stack of stack of maps. The two methods called
-	pushToCallStack() and popCallStack() were added to add a new scope of stack memory each time a function gets called.
-	When a function exits, the call stack is popped. To handle the copy by sharing method of parameter passing, 
-	the parameters of the called function are set to point to the same memory as the arguments that are being passed in.
-	Because this shares the memory index in the heap memory, changing the parameter value in the function would change
-	the original values of the arguments that are being passed in. A hashmap is used in the Executor class to link
-	IDs of the function to the FuncDecl so that the statement sequence in the FuncDecl could be executed later.
+	In this project, the garbage collector's counter for the reference is added.
+	To summarize, an array list is added to Executor class to handle this counter.
+	Every time a new scope is added, another element is added to the array list with the same
+	counter value as the current one. In that new scope, if the new element is added to
+	the heap memory, the counter at the last index of the array list is incremented.
+	When the program goes out of scope by one, the last element in the array list is removed.
+	If the removed element does not equal to the new last element, it prints the 
+	garbage collector counter.
+	At the end of the program before it terminates, the program checks if the 
+	last element in the array list is not zero. If it's nonzero, it decrements the counter
+	by one until it reaches the counter of 0. The program then exits.
 
 
 
 Special Features/Comments:
+	Implemented on top of the Project 4 canonical. 
 	Tested using the original set of test cases provided by the TS.
 
 Known Bugs:
-
-	Currently fails some of the custom test cases. I believe this is because when I execute a function call,
-	I am assuming that the formals in the FuncCall does not exist in the memory, and when the arguments matches the
-	formals in the called function, it produces an incorrect output.
-
+	N/A
