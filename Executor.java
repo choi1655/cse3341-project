@@ -26,6 +26,8 @@ class Executor {
 	
 	// This will store all FuncDecls so we can look up the function being called
 	static HashMap<String, FuncDecl> funcDefinitions;
+
+	static List<Integer> referenceCounts = new ArrayList<>();
 	
 	/*
 	Overriding some methods from the super class to handle the call stack
@@ -38,14 +40,46 @@ class Executor {
 		
 		stackSpace = new Stack<Stack<HashMap<String, CoreVar>>>();
 		funcDefinitions = new HashMap<String, FuncDecl>();
+		referenceCounts.add(0);
+	}
+
+	static int getNumOfReferences() {
+		if (referenceCounts.isEmpty()) {
+			return 0;
+		}
+		return referenceCounts.get(referenceCounts.size() - 1);
+	}
+
+	static void addReferenceScope() {
+		int num = getNumOfReferences();
+		referenceCounts.add(num);
+	}
+
+	static void removeReferenceScope() {
+		referenceCounts.remove(referenceCounts.size() - 1);
+		System.out.printf("gc:%d\n", getNumOfReferences());
+	}
+
+	static void addReferenceCount() {
+		int num = getNumOfReferences();
+		referenceCounts.set(referenceCounts.size() - 1, num + 1);
+		System.out.printf("gc:%d\n", getNumOfReferences());
+	}
+
+	static void removeReferenceCount() {
+		int num = getNumOfReferences();
+		referenceCounts.set(referenceCounts.size() - 1, num - 1);
+		System.out.printf("gc:%d\n", getNumOfReferences());
 	}
 	
 	static void pushLocalScope() {
 		stackSpace.peek().push(new HashMap<String, CoreVar>());
+		addReferenceScope();
 	}
 	
 	static void popLocalScope() {
 		stackSpace.peek().pop();
+		removeReferenceScope();
 	}
 	
 	static int getNextData() {
@@ -92,6 +126,7 @@ class Executor {
 		}
 		x.value = heapSpace.size();
 		heapSpace.add(null);
+		addReferenceCount();
 	}
 	
 	static Core getType(String identifier) {
@@ -178,6 +213,7 @@ class Executor {
 	
 	static void popFrame() {
 		stackSpace.pop();
+		removeReferenceScope();
 	}
 
 }

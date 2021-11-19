@@ -1,4 +1,3 @@
-import java.util.*;
 
 class Loop implements Stmt {
 	Cond cond;
