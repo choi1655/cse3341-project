@@ -20,7 +20,6 @@ class DeclClass {
 	}
 	
 	void execute() {
-		// Id list has two execute fucntions, call the one for ref variables
 		list.executeRefIdList();
 	}		
 }

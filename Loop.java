@@ -30,10 +30,13 @@ class Loop implements Stmt {
 	}
 	
 	public void execute() {
-		while (cond.execute()) {
+		boolean condition = cond.execute();
+		Executor.pushLocalScope();
+		while (condition) {
 			Executor.pushLocalScope();
 			ss.execute();
 			Executor.popLocalScope();
+			condition = cond.execute();
 		}
 		
 	}

@@ -5,7 +5,8 @@ The Ohio State University Autumn 2021 CSE 3341 (Principles of Programming Langua
 * [Project 1: Scanner](https://github.com/choi1655/cse3341-project/tree/project-1)
 * [Project 2: Parser](https://github.com/choi1655/cse3341-project/tree/project-2)
 * [Project 3: Interpreter/Executor](https://github.com/choi1655/cse3341-project/tree/project-3)
-* [Project 4: Function Calls](https://github.com/choi1655/cse3341-project/tree/project-4)
+* [Project 4: Function Calls](https://github.com/choi1655/cse3341-project/tree/project-4-final)
+* [Project 5: Garbage Collector](https://github.com/choi1655/cse3341-project/tree/project-5)
 
 
 ## Instructor
