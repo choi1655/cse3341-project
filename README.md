@@ -7,7 +7,7 @@ The Ohio State University Autumn 2021 CSE 3341 (Principles of Programming Langua
 * [Project 3: Interpreter/Executor](https://github.com/choi1655/cse3341-project/tree/project-3)
 * [Project 4: Function Calls](https://github.com/choi1655/cse3341-project/tree/project-4-final)
 * [Project 5: Garbage Collector](https://github.com/choi1655/cse3341-project/tree/project-5)
-* [Project 6: Functional Language](https://github.com/choi1655/cse3341-project    /tree/project-6)
+* [Project 6: Functional Language](https://github.com/choi1655/cse3341-project/tree/project-6)
 
 
 ## Instructor
